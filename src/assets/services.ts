@@ -1,173 +1,88 @@
 import {EUserPost, IMenuItem} from "./assets"
+import {
+    adminItem,
+    applicationTechnicItem,
+    constructionSiteItem,
+    driverSheetItem,
+    errorItem,
+    infoItem, logoutItem, technicSheetItem, technicsItem, usersItem,
+    workDayItem
+} from "./pagesData"
+
 
 export function getUserMenuItems(userPost: EUserPost): IMenuItem[] {
     switch (userPost) {
         case EUserPost.ADMINISTRATOR:
             return [
-                {
-                    name: "Админ страница", onClick: () => {
-                        alert("Админ страница")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Info page", onClick: () => {
-                        alert("Info page")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Error page", onClick: () => {
-                        alert("Error page")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Заявки на технику", onClick: () => {
-                        alert("Заявки на технику")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Объекты", onClick: () => {
-                        alert("Объекты")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Табель Рабочие дни", onClick: () => {
-                        alert("Табель Рабочие дни")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Табель Водители", onClick: () => {
-                        alert("Табель Водители")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Табель Техника", onClick: () => {
-                        alert("Табель Техника")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Техника", onClick: () => {
-                        alert("Техника")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Персонал", onClick: () => {
-                        alert("Персонал")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Выйти", onClick: () => {
-                        alert("Выйти")
-                    }, afterSeparated: true
-                }
+                adminItem,
+                infoItem,
+                errorItem,
+                applicationTechnicItem,
+                constructionSiteItem,
+                workDayItem,
+                driverSheetItem,
+                technicSheetItem,
+                technicsItem,
+                usersItem,
+                logoutItem
             ]
         case EUserPost.FOREMAN:
         case EUserPost.MASTER:
             return [
-                {
-                    name: "Заявки на технику", onClick: () => {
-                        alert("Заявки на технику")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Объекты", onClick: () => {
-                        alert("Объекты")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Техника", onClick: () => {
-                        alert("Техника")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Персонал", onClick: () => {
-                        alert("Персонал")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Выйти", onClick: () => {
-                        alert("Выйти")
-                    }, afterSeparated: true
-                }
+                applicationTechnicItem,
+                constructionSiteItem,
+                technicsItem,
+                usersItem,
+                logoutItem
             ]
         case EUserPost.SUPPLY:
             return [
-                {
-                    name: "Выйти", onClick: () => {
-                        alert("Выйти")
-                    }, afterSeparated: true
-                }
+                logoutItem
             ]
         case EUserPost.MECHANIC:
             return [
-                {
-                    name: "Заявки на технику", onClick: () => {
-                        alert("Заявки на технику")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Табель Водители", onClick: () => {
-                        alert("Табель Водители")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Табель Техника", onClick: () => {
-                        alert("Табель Техника")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Техника", onClick: () => {
-                        alert("Техника")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Персонал", onClick: () => {
-                        alert("Персонал")
-                    }, afterSeparated: false
-                },
-                {
-                    name: "Выйти", onClick: () => {
-                        alert("Выйти")
-                    }, afterSeparated: true
-                }
+                applicationTechnicItem,
+                driverSheetItem,
+                technicSheetItem,
+                technicsItem,
+                usersItem,
+                logoutItem
             ]
         case EUserPost.DRIVER:
             return [
-                {
-                    name: "Заявки на технику", onClick: () => {
-                        alert("Заявки на технику")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Выйти", onClick: () => {
-                        alert("Выйти")
-                    }, afterSeparated: true
-                }
+                applicationTechnicItem,
+                logoutItem
             ]
         case EUserPost.EMPLOYEE:
             return [
-                {
-                    name: "Заявки на технику", onClick: () => {
-                        alert("Заявки на технику")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Выйти", onClick: () => {
-                        alert("Выйти")
-                    }, afterSeparated: true
-                }
+                applicationTechnicItem,
+                logoutItem
             ]
         default:
             return [
-                {
-                    name: "Заявки на технику", onClick: () => {
-                        alert("Заявки на технику")
-                    }, afterSeparated: true
-                },
-                {
-                    name: "Выйти", onClick: () => {
-                        alert("Выйти")
-                    }, afterSeparated: true
-                }
+                applicationTechnicItem,
+                logoutItem
             ]
+    }
+}
+
+export function getEUserPost(post:string):EUserPost{
+    switch (post) {
+        case EUserPost.ADMINISTRATOR:
+            return EUserPost.ADMINISTRATOR
+        case EUserPost.FOREMAN:
+            return EUserPost.FOREMAN
+        case EUserPost.MASTER:
+            return EUserPost.MASTER
+        case EUserPost.SUPPLY:
+            return EUserPost.SUPPLY
+        case EUserPost.MECHANIC:
+            return EUserPost.MECHANIC
+        case EUserPost.DRIVER:
+            return EUserPost.DRIVER
+        case EUserPost.EMPLOYEE:
+            return EUserPost.EMPLOYEE
+        default:
+            return EUserPost.EMPLOYEE
     }
 }

@@ -6,6 +6,7 @@ export enum EHeaderButtonContext {
     sendAll = "Отправить все",
     reSendAll = "Повторно отправить",
 }
+
 export enum EBtnColorClass {
     goToMain = "btn-primary",
     existConflicts = "btn-danger",
@@ -14,6 +15,7 @@ export enum EBtnColorClass {
     sendAll = "btn-warning",
     reSendAll = "btn-outline-secondary",
 }
+
 export enum EUserPost {
     ADMINISTRATOR = "administrator",
     FOREMAN = "foreman",
@@ -25,7 +27,72 @@ export enum EUserPost {
 }
 
 export interface IMenuItem {
-    onClick: () => void;
+    href: string;
     name: string;
     afterSeparated: boolean;
+    action?: ()=>{}
+}
+
+export interface IUsers {
+    id?: number;
+    username: string;
+    first_name: string;
+    last_name: string;
+    telephone: string;
+    password?: string
+    telegram_id_chat: string
+    post: string;
+    supervisor_user_id?: number;
+    isArchive: boolean;
+    last_login?: string;
+}
+
+export interface IUser {
+    "id": number | undefined;
+    "username": string;
+    "password": string;
+    "first_name": string;
+    "last_name": string;
+    "telephone": string;
+    "telegram_id_chat": bigint;
+    "post": string;
+    "supervisor_user_id": number | undefined;
+    "isArchive": boolean;
+    "last_login": string;
+    "is_show_panel": boolean;
+    "is_show_saved_app": boolean;
+    "is_show_absent_app": boolean;
+    "is_show_technic_app": boolean;
+    "is_show_material_app": boolean;
+    "filter_construction_site": string;
+    "filter_foreman": string;
+    "filter_technic": string;
+    "sort_by": string;
+    "color_title": string;
+    "font_size": string;
+}
+
+export interface IForeman {
+    "id": number;
+    "username": string;
+    "password": string;
+    "first_name": string;
+    "last_name": string;
+}
+export interface IPosts {
+    title: string;
+    description: string;
+}
+
+
+/////
+export interface applicationData{
+    accept_mode: boolean;
+    current_weekday: string;
+    next_work_day: string;
+    prev_work_day: string;
+    today: string;
+    view_mode: string;
+    weekday: string;
+    current_user: IUsers;
 }

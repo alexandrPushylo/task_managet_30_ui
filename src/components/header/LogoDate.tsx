@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
+import {useAppStore} from "../../store/store";
+import {applicationSlice} from "../../store/slices/applicationSlice";
+
 
 function LogoDate() {
-    const [logoDate, setLogoDate] = useState({
-        date: 0,
-        weekday: ''
-    })
-    useEffect(()=>{
-        setLogoDate({date : 15, weekday : 'Monday'})
-    },[]);
+
+    const appStore = useAppStore();
+    const today = applicationSlice.selectors.selectToday(appStore.getState())
+    const currentWeekday = applicationSlice.selectors.selectCurrentWeekday(appStore.getState())
 
     return (
         <div
             className="nav-logo m-0 ms-2 p-0"
             style={{textAlign: "center", width: 'min-content'}}>
-            <span style={{fontSize: '14pt'}}>{logoDate.date}</span>
+            <span style={{fontSize: '14pt'}}>{today}</span>
             <hr className="m-0"/>
-            <span>{logoDate.weekday}</span>
+            <span>{currentWeekday}</span>
         </div>
     );
 }

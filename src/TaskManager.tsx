@@ -1,15 +1,38 @@
-import React from 'react';
+import React, {useEffect, useState, createContext, useMemo} from 'react';
+import {BrowserRouter} from "react-router";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+import Content from "./components/content/Content";
+import {getData} from "./api/api";
+import Login from "./components/content/Login";
+import {applicationData} from "./assets/assets";
+import {useAppDispatch, useAppSelector, useAppStore} from "./store/store";
+import {applicationSlice, fetchAppData} from "./store/slices/applicationSlice";
+
+
 
 function TaskManager() {
-  return (
-    <div className="App">
-        <Header />
-      <div className='containet'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias atque doloribus eveniet explicabo fuga impedit ipsam laudantium modi neque nostrum odio recusandae rerum, similique sint totam! Culpa ipsam molestiae voluptate.</div>
-        <Footer />
-    </div>
-  );
+
+    const dispatch = useAppDispatch();
+    const appStore = useAppStore();
+
+    useEffect(() => {
+        const isDownloaded = applicationSlice.selectors.selectIsDownloaded(appStore.getState());
+        !isDownloaded&&
+        dispatch(fetchAppData())
+    }, [appStore, dispatch]);
+
+
+
+    return (
+        <div className="App">
+            <BrowserRouter>
+                    <Header/>
+                    <Content/>
+                    <Footer/>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default TaskManager;

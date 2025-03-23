@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {EBtnColorClass, EHeaderButtonContext} from "../../assets/assets";
+import {NavLink} from "react-router";
 
 
 function HeaderButton() {
@@ -40,9 +41,9 @@ function HeaderButton() {
 
     return (
         <div>
-            <button
+            <NavLink to="/dashboard"
                 className={'btn '+ btnColor}
-            >{btnContent}</button>
+            >{btnContent}</NavLink>
         </div>
     );
 }
