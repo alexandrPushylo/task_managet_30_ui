@@ -3,12 +3,10 @@ import {BrowserRouter} from "react-router";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import Content from "./components/content/Content";
-import {getData} from "./api/api";
 import Login from "./components/content/Login";
 import {applicationData} from "./assets/assets";
 import {useAppDispatch, useAppSelector, useAppStore} from "./store/store";
 import {applicationSlice, fetchAppData} from "./store/slices/applicationSlice";
-
 
 
 function TaskManager() {
@@ -21,8 +19,6 @@ function TaskManager() {
         !isDownloaded&&
         dispatch(fetchAppData())
     }, [appStore, dispatch]);
-
-
 
     return (
         <div className="App">

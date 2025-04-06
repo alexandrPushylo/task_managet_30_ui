@@ -16,6 +16,8 @@ export enum EBtnColorClass {
     reSendAll = "btn-outline-secondary",
 }
 
+export type PostTitle = "administrator" | "foreman" | "master" | "driver" | "mechanic" | "supply" | "employee" | string;
+
 export enum EUserPost {
     ADMINISTRATOR = "administrator",
     FOREMAN = "foreman",
@@ -34,17 +36,17 @@ export interface IMenuItem {
 }
 
 export interface IUsers {
-    id?: number;
+    id: number;
     username: string;
-    first_name: string;
-    last_name: string;
-    telephone: string;
-    password?: string
-    telegram_id_chat: string
-    post: string;
-    supervisor_user_id?: number;
+    first_name?: string;
+    last_name?: string;
+    telephone?: string;
+    password: string
+    telegram_id_chat?: string
+    post: PostTitle;
+    supervisor_user_id: number | null;
     isArchive: boolean;
-    last_login?: string;
+    // last_login?: string;
 }
 
 export interface IUser {
@@ -79,10 +81,13 @@ export interface IForeman {
     "first_name": string;
     "last_name": string;
 }
+
+
 export interface IPosts {
-    title: string;
+    title: PostTitle;
     description: string;
 }
+
 
 
 /////

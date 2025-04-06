@@ -1,4 +1,7 @@
+import {Route, Routes} from "react-router";
 import React, {CSSProperties} from 'react';
+import UsersFooter from "./UsersFooter";
+import TechnicsFooter from "./TechnicsFooter";
 
 
 const cssStyle: CSSProperties = {
@@ -12,7 +15,18 @@ function Footer() {
             style={cssStyle}
             className="navbar container-fluid position-fixed bottom-0"
         >
+            <Routes>
+                <Route path="/dashboard" element={<></>}/>
 
+                <Route path="/user/:userId" element={<></>}/>
+                <Route path="/users" element={<UsersFooter/>}/>
+                <Route path="/technics" element={<TechnicsFooter/>}/>
+
+                <Route path="/logout" element={<></>}/>
+                <Route path="/login" element={<></>}/>
+
+                <Route path="*" element={<></>}/>
+            </Routes>
         </div>
     );
 }

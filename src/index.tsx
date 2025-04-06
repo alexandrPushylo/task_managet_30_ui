@@ -4,17 +4,24 @@ import './index.css';
 import TaskManager from './TaskManager';
 import {Provider} from 'react-redux'
 import {store} from "./store/store";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
+const queryClient = new QueryClient()
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-        <TaskManager />
-    </Provider>
+    <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+            <Provider store={store}>
+                <TaskManager/>
 
-  </React.StrictMode>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </Provider>
+        </QueryClientProvider>
+
+    </React.StrictMode>
 );
 

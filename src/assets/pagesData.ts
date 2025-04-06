@@ -1,7 +1,4 @@
 import {IMenuItem} from "./assets"
-import {logoutApi} from "../api/api";
-import {useAppDispatch} from "../store/store";
-import {fetchLogout} from "../store/slices/applicationSlice";
 
 
 export const adminItem: IMenuItem = {
@@ -46,7 +43,7 @@ export const technicSheetItem: IMenuItem = {
 }
 export const technicsItem: IMenuItem = {
     name: "Техника",
-    href: "",
+    href: "/technics",
     afterSeparated: true
 }
 export const usersItem: IMenuItem = {

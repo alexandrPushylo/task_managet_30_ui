@@ -2,7 +2,6 @@ import React, {CSSProperties} from "react";
 import LogoDate from "./LogoDate";
 import HeaderButton from "./HeaderButton";
 import UserButton from "./UserButton";
-import {applicationData} from "../../assets/assets";
 import {useAppDispatch, useAppSelector, useAppStore} from "../../store/store";
 import {applicationSlice} from "../../store/slices/applicationSlice";
 

@@ -10,6 +10,7 @@ import {applicationSlice} from "../../store/slices/applicationSlice";
 function UserButton() {
 
     const currentUser = useAppSelector(state=>applicationSlice.selectors.selectCurrentUser(state));
+
     const userPost = getEUserPost(currentUser ? currentUser.post : EUserPost.EMPLOYEE);
     const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
 

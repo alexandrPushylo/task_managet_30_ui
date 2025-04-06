@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {instance, loginApi} from "../../api/api";
-import {applicationSlice, fetchAppData, fetchLogin} from "../../store/slices/applicationSlice";
+import {applicationSlice, fetchAppData, fetchLogin, fetchToken} from "../../store/slices/applicationSlice";
 import {useAppDispatch, useAppSelector, useAppStore} from "../../store/store";
 import {useNavigate} from "react-router";
 
@@ -20,12 +19,23 @@ const labelStyle = {
 function Login() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const [login, setLogin] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     function onSubmit(e: React.FormEvent) {
         e.preventDefault()
-        dispatch(fetchLogin({username: login, password:password})).then(()=>navigate("/dashboard"))
+        dispatch(fetchLogin({username: username, password:password}))
+            // .then(() => {
+            //     dispatch(fetchToken())
+            // })
+            .then(()=> {
+                dispatch(fetchAppData());
+                })
+            .then(()=>{
+                navigate("/dashboard");
+                })
+
+
     }
 
     return (
@@ -35,9 +45,9 @@ function Login() {
                     <label className="w-100" style={labelStyle}>Логин (Фамилия или телефон)
                         <input type="text" className="form-control" name="username"
                                placeholder="напр: Петров или 1234567"
-                               value={login}
+                               value={username}
                                onChange={(e) => {
-                                   setLogin(e.target.value)
+                                   setUsername(e.target.value)
                                }}
                         />
                     </label>
