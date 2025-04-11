@@ -1,0 +1,25 @@
+.Application{
+    /*position: absolute;*/
+    /*width:100vw;*/
+    /*height:100vh;*/
+    /*top: 50%;*/
+    /*right: 50%;*/
+    /*transform: translateX(50%);*/
+}
+.Background{
+    position: absolute;
+    width:100vw;
+    height:100vh;
+    backdrop-filter: blur(2px);
+
+}
+.Loader{
+    position: absolute;
+    top: 20%;
+    right: 50%;
+    transform: translateX(50%);
+    /*border: black solid 1px;*/
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #090909;
+}
