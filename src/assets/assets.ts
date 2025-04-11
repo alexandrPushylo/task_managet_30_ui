@@ -16,7 +16,7 @@ export enum EBtnColorClass {
     reSendAll = "btn-outline-secondary",
 }
 
-export type PostTitle = "administrator" | "foreman" | "master" | "driver" | "mechanic" | "supply" | "employee" | string;
+export type PostTitle = "administrator" | "foreman" | "master" | "driver" | "mechanic" | "supply" | "employee";
 
 export enum EUserPost {
     ADMINISTRATOR = "administrator",

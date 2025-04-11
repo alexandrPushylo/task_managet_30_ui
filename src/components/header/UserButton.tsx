@@ -1,17 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {EUserPost, IMenuItem} from "../../assets/assets";
+import {IMenuItem} from "../../assets/assets";
 import {getEUserPost, getUserMenuItems} from "../../assets/services";
 import ProfileItem from "./userMenuItems/ProfileItem";
 import Item from "./userMenuItems/Item";
-import {useAppSelector} from "../../store/store";
-import {applicationSlice} from "../../store/slices/applicationSlice";
+import {useCurrentUser} from "../../api/applicationApi";
 
 
 function UserButton() {
 
-    const currentUser = useAppSelector(state=>applicationSlice.selectors.selectCurrentUser(state));
-
-    const userPost = getEUserPost(currentUser ? currentUser.post : EUserPost.EMPLOYEE);
+    const {currentUser} = useCurrentUser()
+    const userPost = getEUserPost(currentUser?.post);
     const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
 
     useEffect(() => {

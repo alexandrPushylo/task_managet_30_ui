@@ -1,11 +1,9 @@
-import React, {useEffect} from 'react';
-import {useAppStore} from "../../../store/store";
-import {applicationSlice} from "../../../store/slices/applicationSlice";
+import React from 'react';
+import {useCurrentUser} from "../../../api/applicationApi";
 
 
 function ProfileItem() {
-    const appStore = useAppStore();
-    const currentUser = applicationSlice.selectors.selectCurrentUser(appStore.getState())
+    const {currentUser} = useCurrentUser()
 
     return (
         <li>

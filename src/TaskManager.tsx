@@ -6,26 +6,30 @@ import Content from "./components/content/Content";
 import Login from "./components/content/Login";
 import {applicationData} from "./assets/assets";
 import {useAppDispatch, useAppSelector, useAppStore} from "./store/store";
-import {applicationSlice, fetchAppData} from "./store/slices/applicationSlice";
+import {applicationSlice, fetchIsAuthenticated} from "./store/slices/applicationSlice";
+import {useAppData} from "./api/applicationApi";
+import {useStore} from "react-redux";
+import Loader from "./components/loaders/Loader";
 
 
 function TaskManager() {
 
     const dispatch = useAppDispatch();
-    const appStore = useAppStore();
 
     useEffect(() => {
-        const isDownloaded = applicationSlice.selectors.selectIsDownloaded(appStore.getState());
-        !isDownloaded&&
-        dispatch(fetchAppData())
-    }, [appStore, dispatch]);
+        dispatch(fetchIsAuthenticated())
+    }, [dispatch]);
+
+    const isAuthenticated = useAppSelector(applicationSlice.selectors.selectIsAuthenticated);
+    const {isLoading} = useAppData({enabled: isAuthenticated});
+
 
     return (
         <div className="App">
             <BrowserRouter>
-                    <Header/>
-                    <Content/>
-                    <Footer/>
+                <Header/>
+                {!isAuthenticated ? <Login/> : isLoading ? <Loader/> : <Content/>}
+                <Footer/>
             </BrowserRouter>
         </div>
     );

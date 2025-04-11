@@ -1,13 +1,18 @@
 import React from "react";
 import {useAppStore} from "../../store/store";
 import {applicationSlice} from "../../store/slices/applicationSlice";
+import {useAppData} from "../../api/applicationApi";
 
 
 function LogoDate() {
 
+    const {appData} = useAppData();
+
     const appStore = useAppStore();
-    const today = applicationSlice.selectors.selectToday(appStore.getState())
-    const currentWeekday = applicationSlice.selectors.selectCurrentWeekday(appStore.getState())
+    // const today = applicationSlice.selectors.selectToday(appStore.getState())
+    const today = appData?.today;
+    // const currentWeekday = applicationSlice.selectors.selectCurrentWeekday(appStore.getState())
+    const currentWeekday = appData?.current_weekday
 
     return (
         <div

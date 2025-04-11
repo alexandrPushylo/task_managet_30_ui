@@ -66,7 +66,7 @@ export function getUserMenuItems(userPost: EUserPost): IMenuItem[] {
     }
 }
 
-export function getEUserPost(post:string):EUserPost{
+export function getEUserPost(post: string | undefined): EUserPost {
     switch (post) {
         case EUserPost.ADMINISTRATOR:
             return EUserPost.ADMINISTRATOR

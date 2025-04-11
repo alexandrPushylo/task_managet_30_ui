@@ -2,7 +2,7 @@ import React, {CSSProperties} from "react";
 import LogoDate from "./LogoDate";
 import HeaderButton from "./HeaderButton";
 import UserButton from "./UserButton";
-import {useAppDispatch, useAppSelector, useAppStore} from "../../store/store";
+import {useAppSelector} from "../../store/store";
 import {applicationSlice} from "../../store/slices/applicationSlice";
 
 const cssStyle: CSSProperties = {
@@ -15,23 +15,24 @@ const cssStyle: CSSProperties = {
 
 
 function Header() {
-
-    const isAuthenticated = useAppSelector(state => applicationSlice.selectors.selectIsAuthenticated(state));
+    const isAuthenticated = useAppSelector(applicationSlice.selectors.selectIsAuthenticated);
 
     return (
         <div
             className="navbar container-fluid position-sticky top-0"
             style={cssStyle}
         >
-            {isAuthenticated ?
-                <>
-                    <LogoDate/>
-                    <HeaderButton/>
-                    <UserButton/>
-                </> :
+            {isAuthenticated ? <>
+                <LogoDate/>
+                <HeaderButton/>
+                <UserButton/>
+            </> : <>
+                <div></div>
+                <div></div>
                 <div>register</div>
-            }
+            </>
 
+            }
         </div>
     );
 }

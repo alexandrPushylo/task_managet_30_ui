@@ -4,10 +4,12 @@ import Users from "./user/Users";
 import Dashboard from "./dashboard/Dashboard";
 import User from "./user/User";
 import {useAppDispatch, useAppSelector} from "../../store/store";
-import {applicationSlice, fetchAppData} from "../../store/slices/applicationSlice";
+import {applicationSlice} from "../../store/slices/applicationSlice";
 import Login from "./Login";
 import Logout from "./Logout";
 import Technics from "./technics/technics";
+import {useAppData} from "../../api/applicationApi";
+import Loader from "../loaders/Loader";
 
 
 const cssStyle: CSSProperties = {
@@ -15,7 +17,9 @@ const cssStyle: CSSProperties = {
 }
 
 function Content() {
-    const isAuthenticated = useAppSelector(state => applicationSlice.selectors.selectIsAuthenticated(state));
+    // const {appData, isLoading} = useAppData();
+    const isAuthenticated = useAppSelector(applicationSlice.selectors.selectIsAuthenticated);
+
     const defComponent = (component: JSX.Element) => isAuthenticated ? component : <Login/>;
 
     return (
@@ -36,6 +40,8 @@ function Content() {
             </Routes>
         </div>
     );
+
+
 }
 
 export default Content;

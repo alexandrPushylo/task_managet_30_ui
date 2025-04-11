@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {applicationSlice, fetchAppData, fetchLogin, fetchToken} from "../../store/slices/applicationSlice";
+import {applicationSlice, fetchLogin} from "../../store/slices/applicationSlice";
 import {useAppDispatch, useAppSelector, useAppStore} from "../../store/store";
 import {useNavigate} from "react-router";
 
@@ -28,9 +28,9 @@ function Login() {
             // .then(() => {
             //     dispatch(fetchToken())
             // })
-            .then(()=> {
-                dispatch(fetchAppData());
-                })
+            // .then(()=> {
+            //     dispatch(fetchAppData());
+            //     })
             .then(()=>{
                 navigate("/dashboard");
                 })
