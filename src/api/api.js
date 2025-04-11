@@ -1,6 +1,6 @@
 import axios from "axios";
-import Cookies from 'js-cookie'
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react"
+import Cookies from 'js-cookie';
+import {QueryClient} from "@tanstack/react-query";
 
 const baseUrl = "http://192.168.1.42:8000/api";
 
@@ -25,3 +25,11 @@ export const instance = axios.create({
 
 
 });
+
+export const getQueryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 60 * 1000
+        }
+    }
+})
