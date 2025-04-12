@@ -16,14 +16,14 @@ function Footer() {
             className="navbar container-fluid position-fixed bottom-0"
         >
             <Routes>
-                <Route path="/dashboard" element={<></>}/>
+                <Route path="/dashboard/" element={<></>}/>
 
-                <Route path="/user/:userId" element={<></>}/>
-                <Route path="/users" element={<UsersFooter/>}/>
-                <Route path="/technics" element={<TechnicsFooter/>}/>
+                <Route path="/user/:userId/" element={<></>}/>
+                <Route path="/users/" element={<UsersFooter/>}/>
+                <Route path="/technics/" element={<TechnicsFooter/>}/>
 
-                <Route path="/logout" element={<></>}/>
-                <Route path="/login" element={<></>}/>
+                <Route path="/logout/" element={<></>}/>
+                <Route path="/login/" element={<></>}/>
 
                 <Route path="*" element={<></>}/>
             </Routes>

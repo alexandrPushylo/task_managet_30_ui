@@ -43,17 +43,17 @@ export const technicSheetItem: IMenuItem = {
 }
 export const technicsItem: IMenuItem = {
     name: "Техника",
-    href: "/technics",
+    href: "/technics/",
     afterSeparated: true
 }
 export const usersItem: IMenuItem = {
     name: "Персонал",
-    href: "/users",
+    href: "/users/",
     afterSeparated: false
 }
 export const logoutItem: IMenuItem = {
     name: "Выйти",
-    href: "/logout",
+    href: "/logout/",
     afterSeparated: true
 }
 

@@ -32,7 +32,7 @@ function Login() {
             //     dispatch(fetchAppData());
             //     })
             .then(()=>{
-                navigate("/dashboard");
+                navigate("/dashboard/");
                 })
 
 

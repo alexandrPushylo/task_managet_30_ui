@@ -25,16 +25,16 @@ function Content() {
     return (
         <div style={cssStyle} className="mb-5">
             <Routes>
-                <Route path="/dashboard" element={defComponent(<Dashboard/>)}/>
+                <Route path="/dashboard/" element={defComponent(<Dashboard/>)}/>
 
-                <Route path="/user/:userId" element={<User/>}/>
+                <Route path="/user/:userId/" element={<User/>}/>
                 <Route path="/user/" element={<User/>}/>
-                <Route path="/users" element={defComponent(<Users/>)}/>
+                <Route path="/users/" element={defComponent(<Users/>)}/>
 
-                <Route path="/technics" element={defComponent(<Technics/>)}/>
+                <Route path="/technics/" element={defComponent(<Technics/>)}/>
 
-                <Route path="/logout" element={<Logout/>}/>
-                <Route path="/login" element={<Login/>}/>
+                <Route path="/logout/" element={<Logout/>}/>
+                <Route path="/login/" element={<Login/>}/>
 
                 <Route path="*" element={<Dashboard/>}/>
             </Routes>

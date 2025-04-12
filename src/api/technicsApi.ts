@@ -64,7 +64,7 @@ export function useCreateTechnic(){
             })
         },
         async onSuccess(){
-            await navigate("/technics")
+            await navigate("/technics/")
         }
     });
 
@@ -105,7 +105,7 @@ export function useUpdateTechnic(technicId: number | string | undefined) {
             })
         },
         async onSuccess(){
-            await navigate("/technics");
+            await navigate("/technics/");
         }
 
     });
@@ -133,7 +133,7 @@ export function useDeleteTechnic(technicId: number | string | undefined) {
             await queryClient.invalidateQueries({
                 queryKey: ['technics', 'technic', 'byId', technicId],
             })
-            await navigate("/technics");
+            await navigate("/technics/");
         }
     });
 
