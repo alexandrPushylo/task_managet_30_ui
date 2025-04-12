@@ -1,0 +1,14 @@
+.Component{
+    margin-top: 20px;
+    max-width: max-content;
+    border: 1px solid black;
+}
+
+.Title{
+    font-size: 18pt;
+    text-decoration: underline;
+}
+
+.Table{
+    width: min-content;
+}
