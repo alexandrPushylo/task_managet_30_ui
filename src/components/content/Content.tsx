@@ -10,6 +10,7 @@ import Logout from "./Logout";
 import Technics from "./technics/technics";
 import {useAppData} from "../../api/applicationApi";
 import Loader from "../loaders/Loader";
+import Technic from "./technics/Technic";
 
 
 const cssStyle: CSSProperties = {

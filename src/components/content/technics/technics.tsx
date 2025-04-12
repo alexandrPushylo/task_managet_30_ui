@@ -68,7 +68,7 @@ interface TableBodyRowProps {
 
 function TableBodyRow({counter, technic}: TableBodyRowProps) {
     return (
-        <tr onClick={() => console.log(technic.id)}>
+        <tr onClick={() => navigate(`/technic/${technic.id}`)}>
             <td>{counter}</td>
             <td>
                 <p className="m-0 fw-bolder">{technic.title}</p>
