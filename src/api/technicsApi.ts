@@ -14,6 +14,10 @@ export interface TechnicsDto{
     attached_driver?: number;
 }
 
+interface technicTypeDto{
+    technic_types: []
+}
+
 export interface ITechnicData{
     id?: string;
     title: string;
@@ -25,6 +29,17 @@ export interface ITechnicData{
     attached_driver?: number;
 }
 
+
+export function useFetchTechnicTypes() {
+    const {data: technicTypes, isLoading, isError} = useQuery({
+        queryKey: ['technics', 'technicTypes'],
+        queryFn: async (meta) => {
+            const response = await instance.get<technicTypeDto>('/api/get_technic_type/', {signal: meta.signal});
+            return response.data;
+        },
+    })
+    return {technicTypes, isLoading, isError};
+}
 
 export function useFetchTechnics() {
     const {data: technics, isLoading, isError} = useQuery({
