@@ -79,7 +79,7 @@ function User() {
                                    onChange={(e) => {
                                        setUser({...user, username: e.target.value})
                                    }}
-                                   name="username" value={user.username}
+                                   name="username" value={user?.username}
                             />
                         </label>
                     </div>
@@ -89,7 +89,7 @@ function User() {
                                    onChange={e => {
                                        setUser({...user, password: e.target.value})
                                    }}
-                                   name="password" value={user.password}
+                                   name="password" value={user?.password}
                             />
                         </label>
                     </div>
@@ -100,7 +100,7 @@ function User() {
                                    onChange={(e) => {
                                        setUser({...user, first_name: e.target.value})
                                    }}
-                                   value={user.first_name}
+                                   value={user?.first_name}
                                    placeholder="Петр" required/>
                         </label>
                     </div>
@@ -110,7 +110,7 @@ function User() {
                                    onChange={(e) => {
                                        setUser({...user, last_name: e.target.value})
                                    }}
-                                   value={user.last_name}
+                                   value={user?.last_name}
                                    placeholder="напр: Петров" required/>
                         </label>
                     </div>
@@ -121,7 +121,7 @@ function User() {
                             </span>
                             <input type="tel" className="form-control" name="telephone"
                                    onChange={event => setUser({...user, telephone: event.target.value})}
-                                   value={user.telephone}
+                                   value={user?.telephone}
                                    placeholder="+375(25)1234567"
                             />
                         </label>
@@ -129,16 +129,16 @@ function User() {
                     <div className="mt-2">
                         <label>Должность
                             <select name="post" className="form-control"
-                                    defaultValue={user.post}
+                                    defaultValue={user?.post}
                                     onChange={e => setUser({...user, post: getEUserPost(e.target.value)})}
                             >
                                 {posts?.map((post: IPosts, index) => {
                                     return (
                                         <option
-                                            value={post.title}
+                                            value={post?.title}
                                             key={index}
                                             selected={user.post === post.title}
-                                        >{post.description}</option>
+                                        >{post?.description}</option>
                                     )
                                 })
                                 }
@@ -151,7 +151,7 @@ function User() {
                             <label>Прораб
                                 <select name="supervisor_user_id" className="form-control"
                                         required={true}
-                                        defaultValue={user.supervisor_user_id}
+                                        defaultValue={user?.supervisor_user_id}
                                         onChange={e => setUser({
                                             ...user,
                                             supervisor_user_id: parseInt(e.target.value)
@@ -162,9 +162,9 @@ function User() {
                                         return (
                                             <option
                                                 key={foreman.id}
-                                                value={foreman.id}
+                                                value={foreman?.id}
                                                 selected={user.supervisor_user_id === foreman.id}
-                                            >{foreman.last_name} {foreman.first_name}</option>
+                                            >{foreman?.last_name} {foreman?.first_name}</option>
                                         )
                                     })}
                                 </select>
@@ -187,7 +187,7 @@ function User() {
                             <button
                                 type="button"
                                 className="btn btn-sm btn-primary"
-                                onClick={() => navigate("/users")}
+                                onClick={() => navigate("/users/")}
                             >Отмена</button>
                         </span>
                         <span>
