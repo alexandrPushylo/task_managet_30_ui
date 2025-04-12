@@ -35,7 +35,7 @@ function TableHead() {
         <tr>
             <th>№</th>
             <th>Название техники</th>
-            <th>Описание</th>
+            <th className={style.for_technic_hide}>Описание</th>
             <th>Прикрепленный водитель</th>
         </tr>
         </thead>
@@ -50,7 +50,7 @@ function TableBody({technicList}: TableBodyProps) {
     return (
         <tbody>
         {technicList.map((technic: TechnicsDto, index: number) => {
-            return (
+            return (!technic.isArchive &&
                 <TableBodyRow
                     key={index}
                     counter={index + 1}
@@ -74,7 +74,7 @@ function TableBodyRow({counter, technic}: TableBodyRowProps) {
                 <p className="m-0 fw-bolder">{technic.title}</p>
                 <p className="m-0 fw-bolder small">[ {technic.id_information} ]</p>
             </td>
-            <td>
+            <td className={style.for_technic_hide}>
                 <p className="m-0 small">{technic.type}</p>
                 <hr className="m-0"/>
                 <p className="m-0 small">{technic.description}</p>

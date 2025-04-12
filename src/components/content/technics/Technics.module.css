@@ -12,3 +12,9 @@
 .Table{
     width: min-content;
 }
+
+@media (max-width: 500px) {
+    .for_technic_hide {
+        display: none;
+    }
+}
