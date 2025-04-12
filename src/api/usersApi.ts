@@ -49,6 +49,17 @@ export function useFetchForemanList() {
     })
     return {foremanList, isLoading, isError, isPending};
 }
+export function useFetchDriverList() {
+    const {data: driverList, isLoading, isError, isPending} = useQuery({
+        queryKey: ['users', 'drivers'],
+        queryFn: async (meta) => {
+            const response = await instance.get<UsersDto[]>('/api/get_users_by_post/driver/', {signal: meta.signal});
+            return response.data;
+        },
+    })
+    return {driverList, isLoading, isError, isPending};
+}
+
 export function useFetchUserPosts() {
     const {data: posts, isLoading, isError, isPending} = useQuery({
         queryKey: ['userPosts'],
@@ -96,9 +107,9 @@ export function useCreateUser(){
         const formData = new FormData(e.currentTarget);
         createUserMutation.mutate({data:formData});
     }
-
     return {handleCreate, isPending: createUserMutation.isPending};
 }
+
 export function useUpdateUser(userId: number | string | undefined) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
