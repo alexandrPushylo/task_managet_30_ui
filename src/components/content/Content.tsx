@@ -32,7 +32,8 @@ function Content() {
                 <Route path="/users" element={defComponent(<Users/>)}/>
 
                 <Route path="/technics" element={defComponent(<Technics/>)}/>
-                <Route path="/technic/:userId" element={<></>}/>
+                <Route path="/technic/:technicId" element={defComponent(<Technic/>)}/>
+                <Route path="/technic" element={defComponent(<Technic/>)}/>
 
                 <Route path="/logout" element={<Logout/>}/>
                 <Route path="/login" element={<Login/>}/>
