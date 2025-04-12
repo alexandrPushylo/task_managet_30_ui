@@ -43,7 +43,7 @@ export function useFetchForemanList() {
     const {data: foremanList, isLoading, isError, isPending} = useQuery({
         queryKey: ['users', 'foreman'],
         queryFn: async (meta) => {
-            const response = await instance.get<UsersDto[]>('/api/get_foreman/', {signal: meta.signal});
+            const response = await instance.get<UsersDto[]>('/api/get_users_by_post/foreman/', {signal: meta.signal});
             return response.data;
         },
     })
