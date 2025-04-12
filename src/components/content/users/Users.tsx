@@ -43,7 +43,7 @@ function Users() {
                                 <td>{user.last_name}</td>
                                 <td>{user.post}</td>
                                 <td>{user.telephone}</td>
-                                {/*<td>{user.last_login}</td>*/}
+                                {/*<td>{users.last_login}</td>*/}
                             </tr>
                         )
                     })}

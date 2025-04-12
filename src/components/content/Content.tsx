@@ -1,8 +1,8 @@
 import React, {CSSProperties, JSX, useEffect, useState} from 'react';
 import {Route, Routes} from "react-router";
-import Users from "./user/Users";
+import Users from "./users/Users";
 import Dashboard from "./dashboard/Dashboard";
-import User from "./user/User";
+import User from "./users/User";
 import {useAppDispatch, useAppSelector} from "../../store/store";
 import {applicationSlice} from "../../store/slices/applicationSlice";
 import Login from "./Login";
@@ -25,16 +25,17 @@ function Content() {
     return (
         <div style={cssStyle} className="mb-5">
             <Routes>
-                <Route path="/dashboard/" element={defComponent(<Dashboard/>)}/>
+                <Route path="/dashboard" element={defComponent(<Dashboard/>)}/>
 
-                <Route path="/user/:userId/" element={<User/>}/>
-                <Route path="/user/" element={<User/>}/>
-                <Route path="/users/" element={defComponent(<Users/>)}/>
+                <Route path="/user/:userId" element={<User/>}/>
+                <Route path="/user" element={<User/>}/>
+                <Route path="/users" element={defComponent(<Users/>)}/>
 
-                <Route path="/technics/" element={defComponent(<Technics/>)}/>
+                <Route path="/technics" element={defComponent(<Technics/>)}/>
+                <Route path="/technic/:userId" element={<></>}/>
 
-                <Route path="/logout/" element={<Logout/>}/>
-                <Route path="/login/" element={<Login/>}/>
+                <Route path="/logout" element={<Logout/>}/>
+                <Route path="/login" element={<Login/>}/>
 
                 <Route path="*" element={<Dashboard/>}/>
             </Routes>

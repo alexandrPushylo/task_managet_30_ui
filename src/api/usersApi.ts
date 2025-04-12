@@ -98,7 +98,7 @@ export function useCreateUser(){
             })
         },
         async onSuccess(){
-            await navigate("/users/")
+            await navigate("/users")
         }
     });
 
@@ -139,7 +139,7 @@ export function useUpdateUser(userId: number | string | undefined) {
             })
         },
         async onSuccess(){
-            await navigate("/users/")
+            await navigate("/users")
         }
 
     });
@@ -166,7 +166,7 @@ export function useDeleteUser(userId: number | string | undefined) {
             await queryClient.invalidateQueries({
                 queryKey: ['users', 'user', 'byId', userId],
             })
-            await navigate("/users/");
+            await navigate("/users");
         }
     });
 

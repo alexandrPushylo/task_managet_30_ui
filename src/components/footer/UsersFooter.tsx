@@ -13,7 +13,7 @@ function UsersFooter() {
                 className="btn btn-success"
                 type="button"
                 onClick={() => {
-                    navigate("/user/");
+                    navigate("/user");
                 }}
             >Добавить пользователя</button>
         </div>

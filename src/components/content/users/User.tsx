@@ -187,7 +187,7 @@ function User() {
                             <button
                                 type="button"
                                 className="btn btn-sm btn-primary"
-                                onClick={() => navigate("/users/")}
+                                onClick={() => navigate("/users")}
                             >Отмена</button>
                         </span>
                         <span>

@@ -41,7 +41,7 @@ function HeaderButton() {
 
     return (
         <div>
-            <NavLink to="/dashboard/"
+            <NavLink to="/dashboard"
                 className={'btn '+ btnColor}
             >{btnContent}</NavLink>
         </div>

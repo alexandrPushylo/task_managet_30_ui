@@ -9,7 +9,7 @@ function Logout() {
 
     useEffect(() => {
         dispatch(fetchLogout()).then(()=>{
-            navigate('/login/');
+            navigate('/login');
         })
     }, [dispatch, navigate]);
 
