@@ -7,7 +7,7 @@ import {useAppDispatch, useAppSelector} from "../../store/store";
 import {applicationSlice} from "../../store/slices/applicationSlice";
 import Login from "./Login";
 import Logout from "./Logout";
-import Technics from "./technics/technics";
+import Technics from "./technics/Technics";
 import {useAppData} from "../../api/applicationApi";
 import Loader from "../loaders/Loader";
 import Technic from "./technics/Technic";

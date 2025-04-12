@@ -6,7 +6,6 @@ import Loader from "../../loaders/Loader";
 import {useFetchDriverList} from "../../../api/usersApi";
 
 export default function Technics() {
-    const navigate = useNavigate();
     const {technics, isLoading} = useFetchTechnics();
 
 
@@ -67,6 +66,7 @@ interface TableBodyRowProps {
 }
 
 function TableBodyRow({counter, technic}: TableBodyRowProps) {
+    const navigate = useNavigate();
     return (
         <tr onClick={() => navigate(`/technic/${technic.id}`)}>
             <td>{counter}</td>

@@ -18,9 +18,11 @@ function Footer() {
             <Routes>
                 <Route path="/dashboard" element={<></>}/>
 
-                <Route path="/user/:userId" element={<></>}/>
+                {/*<Route path="/user/:userId" element={<></>}/>*/}
                 <Route path="/users" element={<UsersFooter/>}/>
                 <Route path="/technics" element={<TechnicsFooter/>}/>
+
+
 
                 <Route path="/logout" element={<></>}/>
                 <Route path="/login" element={<></>}/>
