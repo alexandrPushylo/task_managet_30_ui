@@ -1,5 +1,5 @@
-import React, {CSSProperties, useEffect, useState} from 'react';
-import {IForeman, IUser, IPosts, EUserPost, PostTitle} from "../../../assets/assets";
+import React, {useEffect, useState} from 'react';
+import {IPosts, EUserPost, PostTitle} from "../../../assets/assets";
 import {useNavigate, useParams} from "react-router";
 import style from "./User.module.css";
 
