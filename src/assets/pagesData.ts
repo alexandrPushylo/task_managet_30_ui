@@ -23,7 +23,7 @@ export const applicationTechnicItem: IMenuItem = {
 }
 export const constructionSiteItem: IMenuItem = {
     name: "Объекты",
-    href: "",
+    href: "/construction_sites",
     afterSeparated: false
 }
 export const workDayItem: IMenuItem = {
