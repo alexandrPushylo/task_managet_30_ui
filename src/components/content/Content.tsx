@@ -13,6 +13,7 @@ import Loader from "../loaders/Loader";
 import Technic from "./technics/Technic";
 import ConstructionSites from "./constructionSite/ConstructionSites";
 import ConstructionSite from "./constructionSite/ConstructionSite";
+import WorkDaysSheet from "./workDaysSheet/WorkDaysSheet";
 
 
 const cssStyle: CSSProperties = {
@@ -42,6 +43,8 @@ function Content() {
                 <Route path="/construction_sites/archive" element={defComponent(<ConstructionSites isArchivePage={true}/>)}/>
                 <Route path="/construction_site/:constructionSiteId" element={defComponent(<ConstructionSite/>)}/>
                 <Route path="/construction_site" element={defComponent(<ConstructionSite/>)}/>
+
+                <Route path="/work_days" element={defComponent(<WorkDaysSheet/>)}/>
 
                 <Route path="/logout" element={<Logout/>}/>
                 <Route path="/login" element={<Login/>}/>

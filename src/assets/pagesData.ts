@@ -28,7 +28,7 @@ export const constructionSiteItem: IMenuItem = {
 }
 export const workDayItem: IMenuItem = {
     name: "Табель Рабочие дни",
-    href: "",
+    href: "/work_days",
     afterSeparated: true
 }
 export const driverSheetItem: IMenuItem = {
