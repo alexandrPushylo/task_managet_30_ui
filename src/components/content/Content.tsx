@@ -11,6 +11,8 @@ import Technics from "./technics/Technics";
 import {useAppData} from "../../api/applicationApi";
 import Loader from "../loaders/Loader";
 import Technic from "./technics/Technic";
+import ConstructionSites from "./constructionSite/ConstructionSites";
+import ConstructionSite from "./constructionSite/ConstructionSite";
 
 
 const cssStyle: CSSProperties = {
@@ -35,6 +37,11 @@ function Content() {
                 <Route path="/technics" element={defComponent(<Technics/>)}/>
                 <Route path="/technic/:technicId" element={defComponent(<Technic/>)}/>
                 <Route path="/technic" element={defComponent(<Technic/>)}/>
+
+                <Route path="/construction_sites" element={defComponent(<ConstructionSites/>)}/>
+                <Route path="/construction_sites/archive" element={defComponent(<ConstructionSites isArchivePage={true}/>)}/>
+                <Route path="/construction_site/:constructionSiteId" element={defComponent(<ConstructionSite/>)}/>
+                <Route path="/construction_site" element={defComponent(<ConstructionSite/>)}/>
 
                 <Route path="/logout" element={<Logout/>}/>
                 <Route path="/login" element={<Login/>}/>

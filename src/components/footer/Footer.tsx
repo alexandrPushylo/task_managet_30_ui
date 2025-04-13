@@ -2,6 +2,8 @@ import {Route, Routes} from "react-router";
 import React, {CSSProperties} from 'react';
 import UsersFooter from "./UsersFooter";
 import TechnicsFooter from "./TechnicsFooter";
+import ConstructionSiteFooter from "./ConstructionSiteFooter";
+import ConstructionSiteArchivesFooter from "./ConstructionSiteArchiveFooter";
 
 
 const cssStyle: CSSProperties = {
@@ -21,6 +23,8 @@ function Footer() {
                 {/*<Route path="/user/:userId" element={<></>}/>*/}
                 <Route path="/users" element={<UsersFooter/>}/>
                 <Route path="/technics" element={<TechnicsFooter/>}/>
+                <Route path="/construction_sites" element={<ConstructionSiteFooter/>}/>
+                <Route path="/construction_sites/archive" element={<ConstructionSiteArchivesFooter/>}/>
 
 
 
