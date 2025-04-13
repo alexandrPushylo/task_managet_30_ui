@@ -94,7 +94,7 @@ export function useUpdateConstructionSite(id: number | string | undefined) {
 
         async onSettled(){
             await queryClient.invalidateQueries({
-                queryKey: ['constructionSites', 'constructionSite', 'byId', id],
+                queryKey: ['constructionSites'],
             })
         },
         async onSuccess(){
@@ -107,9 +107,17 @@ export function useUpdateConstructionSite(id: number | string | undefined) {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         updateConstructionSiteMutation.mutate({data:formData});
+    };
+    const toggleDisplay = (status: boolean) => {
+        const data = {status: status}
+        updateConstructionSiteMutation.mutate({data:data});
+    }
+    const handleRestore = () => {
+        const data = {isArchive: false, status: true}
+        updateConstructionSiteMutation.mutate({data:data});
     }
 
-    return {handleUpdate, isPending: updateConstructionSiteMutation.isPending};
+    return {handleUpdate, toggleDisplay, handleRestore, isPending: updateConstructionSiteMutation.isPending};
 }
 export function useDeleteConstructionSite(id: number | string | undefined) {
     const queryClient = useQueryClient();
@@ -123,7 +131,7 @@ export function useDeleteConstructionSite(id: number | string | undefined) {
 
         async onSettled(){
             await queryClient.invalidateQueries({
-                queryKey: ['constructionSites', 'constructionSite', 'byId', id],
+                queryKey: ['constructionSites'],
             })
             await navigate("/construction_sites");
         }
