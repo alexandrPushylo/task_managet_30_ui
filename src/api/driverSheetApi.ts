@@ -53,7 +53,7 @@ export function useUpdateDriverSheet(id: number | string | undefined) {
             await queryClient.cancelQueries({queryKey: ['driverSheets', 'driverSheet', 'byId', id]});
             const prevDriverSheet = queryClient.getQueriesData({queryKey:['driverSheets', 'driverSheet', 'byId', id]});
             queryClient.setQueriesData(
-                {queryKey:['workDays', 'workDay', 'byId', id]}, newDriverSheet);
+                {queryKey:['driverSheets', 'driverSheet', 'byId', id]}, newDriverSheet);
 
             return {prevDriverSheet};
         },
