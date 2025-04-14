@@ -1,11 +1,17 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useFetchWorkDaysSheet, useUpdateWorkDay, WorkDaysSheetDto} from "../../../api/workDaySheetApi";
 import style from "./WorkDays.module.css";
 import {useAppData} from "../../../api/applicationApi";
 
 export default function WorkDaysSheet() {
-    const {workDays} = useFetchWorkDaysSheet();
+    const {workDays: workDaysData} = useFetchWorkDaysSheet();
     const {appData} = useAppData();
+
+    const [workDays, setWorkDays] = useState<WorkDaysSheetDto[]>()
+
+    useEffect(() => {
+        setWorkDays(workDaysData)
+    }, [workDaysData]);
 
     return (
         <div className={style.Component + " container"}>
