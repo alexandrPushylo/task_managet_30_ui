@@ -18,11 +18,12 @@ export interface IDriverSheet{
 }
 
 
-export function useFetchDriverSheet() {
+export function useFetchDriverSheet(current_day?: string) {
+    const url_current_day = current_day?`?current_day=${current_day}`: '';
     const {data: driverSheets, isLoading, isError} = useQuery({
-        queryKey: ['driverSheets', 'all'],
+        queryKey: ['driverSheets', 'all', current_day],
         queryFn: async (meta) => {
-            const response = await instance.get<DriverSheetDto[]>('/api/driver_sheet/', {signal: meta.signal});
+            const response = await instance.get<DriverSheetDto[]>(`/api/driver_sheet/${url_current_day}`, {signal: meta.signal});
             return response.data;
         },
     })
