@@ -19,7 +19,7 @@ export default function WorkDaysSheet() {
             <table className={"table align-items-center"}>
                 <TableHead/>
                 {workDays&&
-                    <TableBody workDays={workDays} today={appData?.today}/>}
+                    <TableBody workDays={workDays} today={appData?.today.date}/>}
             </table>
         </div>
     );
