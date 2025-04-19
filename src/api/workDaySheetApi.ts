@@ -33,7 +33,7 @@ export interface IWorkDaysSheet{
 
 export function useFetchWorkDaysSheet() {
     const {data: workDays, isLoading, isError} = useQuery({
-        queryKey: ['workDays', 'all'],
+        queryKey: ['workDaysSheet', 'all'],
         queryFn: async (meta) => {
             const response = await instance.get<WorkDaysSheetDto[]>('/api/work_day_sheet/', {signal: meta.signal});
             return response.data;
@@ -43,7 +43,7 @@ export function useFetchWorkDaysSheet() {
 }
 export function useFetchWorkDaySheetById(id: string | undefined) {
     const {data: workDay, isLoading, isError, isPending} = useQuery({
-        queryKey: ['workDays', 'workDay', 'byId', id],
+        queryKey: ['workDaysSheet', 'workDaySheet', 'byId', id],
         queryFn: async (meta) => {
             const response = await instance.get<WorkDaySheetDto>(`/api/work_day_sheet/${id}/`, {signal: meta.signal});
             return response.data;
@@ -64,22 +64,22 @@ export function useUpdateWorkDay(id: number | string | undefined) {
             return response.data;
         },
         onMutate: async (newWorkDay) => {
-            await queryClient.cancelQueries({queryKey: ['workDays', 'workDay', 'byId', id]});
-            const prevWorkDay = queryClient.getQueriesData({queryKey:['workDays', 'workDay', 'byId', id]});
+            await queryClient.cancelQueries({queryKey: ['workDaysSheet', 'workDaySheet', 'byId', id]});
+            const prevWorkDay = queryClient.getQueriesData({queryKey:['workDaysSheet', 'workDaySheet', 'byId', id]});
             queryClient.setQueriesData(
-                {queryKey:['workDays', 'workDay', 'byId', id]}, newWorkDay);
+                {queryKey:['workDaysSheet', 'workDaySheet', 'byId', id]}, newWorkDay);
 
             return {prevWorkDay};
         },
         onError: (_, __, context) => {
             if (context){
-                queryClient.setQueriesData({queryKey:['workDays', 'workDay', 'byId', id]}, context.prevWorkDay);
+                queryClient.setQueriesData({queryKey:['workDaysSheet', 'workDaySheet', 'byId', id]}, context.prevWorkDay);
             }
         },
 
         async onSettled(){
             await queryClient.invalidateQueries({
-                queryKey: ['workDays'],
+                queryKey: ['workDaysSheet'],
             })
         },
         // async onSuccess(){
