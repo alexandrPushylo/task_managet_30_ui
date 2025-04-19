@@ -1,0 +1,18 @@
+.Component{
+    margin-top: 20px;
+    width: 22rem;
+    box-shadow: 5px 5px 20px 5px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.status_true{
+    color: #018349;
+}
+.status_false{
+    text-decoration-line: line-through;
+}
+
+.td_status{
+    text-align: center;
+}

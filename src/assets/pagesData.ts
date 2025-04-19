@@ -33,7 +33,7 @@ export const workDayItem: IMenuItem = {
 }
 export const driverSheetItem: IMenuItem = {
     name: "Табель Водители",
-    href: "",
+    href: "/driver_sheet",
     afterSeparated: false
 }
 export const technicSheetItem: IMenuItem = {
