@@ -86,6 +86,7 @@ function TechnicSheetCard({technicSheet, technicList, driverList, getDriverSheet
             <DriverSelect
                 driverId={driverSheet?.driver}
                 driverList={driverList}
+                driverStatus={driverSheet?.status}
                 setDriverSheet={updateTechnicSheet.setDriverSheet}
                 getDriverSheetId={getDriverSheetId}
                 view_mode={view_mode}
@@ -102,14 +103,16 @@ function TechnicSheetCard({technicSheet, technicList, driverList, getDriverSheet
 interface DriverSelectProps{
     driverList?: UsersDto[];
     driverId?: number;
+    driverStatus?: boolean;
     setDriverSheet: (driverSheetId: string | undefined) => void;
     getDriverSheetId: (driverId: string | undefined) => string | undefined;
     view_mode?: string;
 }
-function DriverSelect({driverList, driverId, setDriverSheet, getDriverSheetId, view_mode}: DriverSelectProps) {
+function DriverSelect({driverList, driverId, setDriverSheet, getDriverSheetId, view_mode, driverStatus}: DriverSelectProps) {
+    const styleStatusClass = driverStatus ? "border border-success" : "border border-danger"
 
     return <div className="col-auto ms-2">
-        <select className="form-control p-1"
+        <select className={"form-control p-1" + styleStatusClass}
                 disabled={view_mode==="view_mode_archive"}
                 onChange={(e) => {
                     setDriverSheet(getDriverSheetId(e.target.value))
