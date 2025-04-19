@@ -15,6 +15,7 @@ import ConstructionSites from "./constructionSite/ConstructionSites";
 import ConstructionSite from "./constructionSite/ConstructionSite";
 import WorkDaysSheet from "./workDaysSheet/WorkDaysSheet";
 import DriverSheet from "./driverSheet/DriverSheet";
+import TechnicSheet from "./technicSheet/TechnicSheet";
 
 
 const cssStyle: CSSProperties = {
@@ -47,6 +48,7 @@ function Content() {
 
                 <Route path="/work_days" element={defComponent(<WorkDaysSheet/>)}/>
                 <Route path="/driver_sheet" element={defComponent(<DriverSheet/>)}/>
+                <Route path="/technic_sheet" element={defComponent(<TechnicSheet/>)}/>
 
                 <Route path="/logout" element={<Logout/>}/>
                 <Route path="/login" element={<Login/>}/>

@@ -24,11 +24,12 @@ export interface ITechnicSheet{
 }
 
 
-export function useFetchTechnicSheet() {
+export function useFetchTechnicSheet(current_day?: string) {
+    const url_current_day = current_day?`?current_day=${current_day}`: '';
     const {data: technicSheets, isLoading, isError} = useQuery({
-        queryKey: ['technicSheets', 'all'],
+        queryKey: ['technicSheets', 'all', current_day],
         queryFn: async (meta) => {
-            const response = await instance.get<TechnicSheetDto[]>('/api/technic_sheet/', {signal: meta.signal});
+            const response = await instance.get<TechnicSheetDto[]>(`/api/technic_sheet/${url_current_day}`, {signal: meta.signal});
             return response.data;
         },
     })
@@ -52,7 +53,7 @@ export function useUpdateTechnicSheet(id: number | string | undefined) {
 
     const  updateTechnicSheetMutation = useMutation({
         mutationFn: async (meta: any) => {
-            const response = await instance.patch<ITechnicSheet>(`/api/driver_sheet/${id}/`, meta.data, {signal: meta.signal});
+            const response = await instance.patch<ITechnicSheet>(`/api/technic_sheet/${id}/`, meta.data, {signal: meta.signal});
             return response.data;
         },
         onMutate: async (newTechnicSheet) => {
@@ -81,11 +82,11 @@ export function useUpdateTechnicSheet(id: number | string | undefined) {
         const formData = new FormData(e.currentTarget);
         updateTechnicSheetMutation.mutate({data:formData});
     };
-    const togglesStatus = (status: boolean) => {
+    const togglesStatus = (status?: boolean) => {
         const data = {status: !status}
         updateTechnicSheetMutation.mutate({data:data});
     }
-    const setDriverSheet = (driverSheetId: string | null) => {
+    const setDriverSheet = (driverSheetId: string | undefined) => {
         const data = {driver_sheet: driverSheetId ? parseInt(driverSheetId) : null}
         updateTechnicSheetMutation.mutate({data:data});
     }

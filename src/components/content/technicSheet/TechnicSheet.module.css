@@ -1,0 +1,17 @@
+.Component{
+    max-width: max-content;
+    box-shadow: 5px 5px 20px 5px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.Card{
+    box-shadow: 1px 1px 10px 1px;
+}
+
+.status_active{
+    background-color: #effdf6;
+}
+.status_inactive{
+    background-color: #fdefef;
+}

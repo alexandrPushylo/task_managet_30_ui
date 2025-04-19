@@ -38,7 +38,7 @@ export const driverSheetItem: IMenuItem = {
 }
 export const technicSheetItem: IMenuItem = {
     name: "Табель Техника",
-    href: "",
+    href: "/technic_sheet",
     afterSeparated: false
 }
 export const technicsItem: IMenuItem = {
