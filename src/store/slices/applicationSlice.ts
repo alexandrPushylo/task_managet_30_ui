@@ -1,56 +1,26 @@
 import {createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import {instance, getQueryClient} from "../../api/api";
 import Cookies from "js-cookie";
-
-// const csrftoken = Cookies.get('csrftoken');
-// console.log("!!!!", csrftoken)
+import {AcceptMode} from "../../assets/assets";
 
 const initialState: ApplicationState = {
-    // isDownloaded: false,
-    // loading: false,
     is_authenticated: false,
+    current_day: undefined
+
 }
 
 interface ApplicationState {
-    // isDownloaded: boolean;
-    // loading: boolean;
-    // today?: string;
-    // "current_weekday"?: string;
-    // "prev_work_day"?: string;
-    // "next_work_day"?: string;
-    // "weekday"?: string;
-    // "view_mode"?: "view_mode_future" | "view_mode_current" | "view_mode_archive"
-    // "accept_mode"?: boolean;
-    "is_authenticated": boolean;
-    // "csrftoken"?: string;
-    // "current_user"?: {
-    //     id: number;
-    //     username: string;
-    //     first_name: string|undefined;
-    //     last_name: string|undefined;
-    //     password: string;
-    //     telephone: string|undefined;
-    //     isArchive: boolean;
-    //     post: string;
-    //     supervisor_user_id: number|undefined;
-    //     telegram_id_chat: string|undefined;
-    // };
+    is_authenticated: boolean;
+    current_day?: string;
 }
 
-//  ====================================================================================
-
-// export const fetchAppData = createAsyncThunk(
-//     'fetchAppData',
-//     async (): Promise<ApplicationState> => {
-//         const response = await instance.get('api/get_data', {});
-//         return response.data;
-//     })
-// export const fetchToken = createAsyncThunk(
-//     'fetchToken',
-//     async (): Promise<{ "csrftoken": string; }> => {
-//         const response = await instance.get('api/get_token');
-//         return response.data;
-//     })
+interface prevDay{
+    id: number;
+    date: string;
+    status: boolean;
+    accept_mode: AcceptMode;
+    weekday: string;
+}
 
 export const fetchLogin = createAsyncThunk(
     'login',
@@ -60,6 +30,17 @@ export const fetchLogin = createAsyncThunk(
         return response.data;
     }
 )
+
+export const getPrevOrNextCurrentDay = createAsyncThunk(
+    'prevOrNextCurrentDay',
+    async (data: { current_day: string, side: "prev" | "next" }):Promise<prevDay> => {
+        const urlCurDay = data.current_day ? `?current_day=${data.current_day}` : '';
+        const response = await instance.get(`/api/get_prev_next_work_day/${urlCurDay}&side=${data.side}`);
+        await getQueryClient.invalidateQueries({queryKey: ['appData']})
+        return response.data;
+    }
+)
+
 
 
 export const fetchIsAuthenticated = createAsyncThunk(
@@ -86,30 +67,17 @@ export const applicationSlice = createSlice({
     initialState,
     selectors: {
         selectIsAuthenticated: (state: ApplicationState) => state.is_authenticated,
-        // selectIsDownloaded:(state:ApplicationState) =>  state.isDownloaded,
-        // selectCurrentUser: state => state.current_user,
-        // selectToday: state => state.today,
-        // selectCurrentWeekday: state => state.current_weekday,
-        // selectCSRFToken: state => state.csrftoken
-
+        selectCurrentDay: (state: ApplicationState) => state.current_day,
     },
     reducers: {
         setIsAuthenticated(state: ApplicationState, action) {
             state.is_authenticated = action.payload;
+        },
+        setCurrentDay(state: ApplicationState, action) {
+            state.current_day = action.payload;
         }
     },
     extraReducers: builder => {
-        // builder.addCase(fetchAppData.pending, (state, action)=>{
-        //     state.loading = true
-        // });
-        // builder.addCase(fetchAppData.fulfilled, (state, action)=>{
-        //     // console.log(action.payload.csrf_token)
-        //     // action.payload.csrf_token && Cookies.set('csrftoken', action.payload.csrf_token)
-        //     return {...action.payload, loading: false, isDownloaded: true}
-        // })
-        // builder.addCase(fetchAppData.rejected, (state, action)=>{
-        //     state.loading = false
-        // })
 
         builder.addCase(fetchIsAuthenticated.fulfilled, (state, action) => {
             state.is_authenticated = action.payload.is_authenticated
@@ -118,6 +86,10 @@ export const applicationSlice = createSlice({
         builder.addCase(fetchLogout.fulfilled, (state, action) => {
             state.is_authenticated = false
             getQueryClient.removeQueries({queryKey: ['appData']});
+        })
+
+        builder.addCase(getPrevOrNextCurrentDay.fulfilled, (state, action) => {
+            state.current_day = action.payload.date;
         })
 
 
