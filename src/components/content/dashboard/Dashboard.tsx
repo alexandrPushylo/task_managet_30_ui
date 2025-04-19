@@ -1,9 +1,11 @@
 import React from 'react';
+import DatePaginator from "../../special/DatePaginator";
 
 function Dashboard() {
     return (
         <div>
-            <h2>Dashboard</h2>
+            <DatePaginator/>
+            {/*<h2>Dashboard</h2>*/}
         </div>
     );
 }
