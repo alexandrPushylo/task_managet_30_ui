@@ -1,0 +1,9 @@
+.Component{
+    width: 20rem;
+    margin-bottom: 30px;
+}
+.item_border{
+    border: 5px solid;
+    border-radius: 10px;
+    box-shadow: 5px 5px 20px 5px;
+}

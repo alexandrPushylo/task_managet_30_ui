@@ -18,6 +18,7 @@ export enum EBtnColorClass {
 
 export type PostTitle = "administrator" | "foreman" | "master" | "driver" | "mechanic" | "supply" | "employee";
 export type AcceptMode = "auto" | "manual" | "off"
+export type AppTodayStatus = "absent" | "saved" | "submitted" | "approved" | "send";
 
 export enum EUserPost {
     ADMINISTRATOR = "administrator",
