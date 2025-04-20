@@ -28,7 +28,7 @@ export function useFetchApplicationsToday(current_day?: string) {
     const {data: appsToday, isLoading, isError} = useQuery({
         queryKey: ['applicationsToday', 'all', current_day],
         queryFn: async (meta) => {
-            const response = await instance.get<ApplicationTodayDto[]>(`/api/application_today/${url_current_day}`, {signal: meta.signal});
+            const response = await instance.get<ApplicationTodayDto[]>(`/api/applications_today/${url_current_day}`, {signal: meta.signal});
             return response.data;
         },
     })
