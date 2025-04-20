@@ -7,3 +7,16 @@
     border-radius: 10px;
     box-shadow: 5px 5px 20px 5px;
 }
+.if_not_appT{
+    color: rgba(0,0,0,0.26);
+}
+.app_status{
+    margin: 0 0 0;
+    font-size: 11pt;
+    text-align: center;
+    font-weight: bolder;
+}
+.app_description{
+    height: min-content;
+    overflow: hidden;
+}
