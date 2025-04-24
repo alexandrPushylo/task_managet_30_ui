@@ -7,7 +7,7 @@ import {applicationSlice} from "../../../store/slices/applicationSlice";
 import {useAppData} from "../../../api/applicationApi";
 import {useFetchDriverList, useFetchForemanList} from "../../../api/usersApi";
 import {useFetchApplicationTechnics} from "../../../api/applicationTechnicApi";
-import {useFetchTechnicSheet} from "../../../api/technicSheetApi";
+import {useFetchConflictIdList, useFetchPriorityIdList, useFetchTechnicSheet} from "../../../api/technicSheetApi";
 import {useFetchDriverSheet} from "../../../api/driverSheetApi";
 import {useFetchTechnics} from "../../../api/technicsApi";
 import {useFetchApplicationMaterials} from "../../../api/applicationMaterialApi";
@@ -22,6 +22,10 @@ export default function AdminDashboard() {
     const {appMaterials} = useFetchApplicationMaterials(currentDay);
     const {technicSheets} = useFetchTechnicSheet(currentDay);
     const {driverSheets} = useFetchDriverSheet(currentDay);
+
+    const {conflictIdList} = useFetchConflictIdList(currentDay);
+    const {priorityIdList} = useFetchPriorityIdList(currentDay);
+
     const {technics} = useFetchTechnics();
     const {foremanList} = useFetchForemanList();
     const {driverList} = useFetchDriverList();
@@ -42,6 +46,8 @@ export default function AdminDashboard() {
                         technicSheets={technicSheets}
                         driverSheets={driverSheets}
                         driverList={driverList}
+                        conflictIdList={conflictIdList}
+                        priorityIdList={priorityIdList}
                     />
                 }
             })

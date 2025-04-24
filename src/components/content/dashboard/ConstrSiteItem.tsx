@@ -7,7 +7,7 @@ import {appDataDto} from "../../../api/applicationApi";
 import {UsersDto} from "../../../api/usersApi";
 import {ApplicationTechnicDto} from "../../../api/applicationTechnicApi";
 import {TechnicsDto} from "../../../api/technicsApi";
-import {TechnicSheetDto} from "../../../api/technicSheetApi";
+import {ConflictIdListDto, PriorityIdListDto, TechnicSheetDto} from "../../../api/technicSheetApi";
 import {DriverSheetDto} from "../../../api/driverSheetApi";
 import {ApplicationMaterialDto} from "../../../api/applicationMaterialApi";
 import {i} from "react-router/dist/production/fog-of-war-CvttGpNz";
@@ -60,14 +60,14 @@ function getForemanTitle(foreman?: UsersDto) {
 
 }
 
-function getTechnicTitle(appTechnic: ApplicationTechnicDto, techSheet?: TechnicSheetDto, technic?: TechnicsDto) {
+function getTechnicTitle(appTechnic: ApplicationTechnicDto, techSheet?: TechnicSheetDto, technic?: TechnicsDto, conflictIdList?: ConflictIdListDto) {
     if (appTechnic.isChecked) {
         return <span className={style.AP_isChecked_title}><small>(<i
             className="fa-solid fa-check"></i>)</small> {technic?.title}</span>
     } else if (appTechnic.is_cancelled) {
         return <span className={style.AP_cancelled_title}><small>(<i
             className="fa-solid fa-xmark"></i>)</small> {technic?.title}</span>
-    } else if (false) { //todo: conflict list
+    } else if (techSheet?.id &&(conflictIdList?.conflict_technic_sheet.includes(techSheet.id))) {
         return <span className={style.AP_conflict_title}> {technic?.title}</span>
     } else if (!techSheet?.status) {
         return <span className={style.AP_not_work_title}> {technic?.title}</span>
@@ -76,12 +76,12 @@ function getTechnicTitle(appTechnic: ApplicationTechnicDto, techSheet?: TechnicS
     }
 }
 
-function getDriverTitle(appTechnic: ApplicationTechnicDto, techSheet?: TechnicSheetDto, driver?: UsersDto) {
+function getDriverTitle(appTechnic: ApplicationTechnicDto, techSheet?: TechnicSheetDto, driver?: UsersDto, priorityIdList?: PriorityIdListDto) {
     if (appTechnic.isChecked) {
         return <span className={style.AP_isChecked_title}> ({driver?.last_name})</span>
     } else if (appTechnic.is_cancelled) {
         return <span className={style.AP_cancelled_title}> ({driver?.last_name})</span>
-    } else if (techSheet?.id === 0) { //todo: priority list
+    } else if (techSheet?.id && (priorityIdList?.priority_id_list.includes(techSheet.id))) {
         return <span className={style.AP_priority_title}> ({driver?.last_name})</span>
     } else {
         return <span style={{color: "black"}}> ({driver?.last_name})</span>
@@ -100,6 +100,8 @@ interface CsItemProps {
     technicSheets?: TechnicSheetDto[];
     driverSheets?: DriverSheetDto[];
     driverList?: UsersDto[];
+    conflictIdList?: ConflictIdListDto;
+    priorityIdList?: PriorityIdListDto;
 }
 
 export default function ConstrSiteItem(
@@ -113,7 +115,9 @@ export default function ConstrSiteItem(
         technics,
         technicSheets,
         driverSheets,
-        driverList
+        driverList,
+        conflictIdList,
+        priorityIdList
     }: CsItemProps
 ) {
 
@@ -170,6 +174,8 @@ export default function ConstrSiteItem(
                                             driverSheet={driverSheet}
                                             technic={technic}
                                             driver={driver}
+                                            priorityIdList={priorityIdList}
+                                            conflictIdList={conflictIdList}
 
                                         />
                                     })}
@@ -244,18 +250,20 @@ interface AppTechnicProps {
     driverSheet?: DriverSheetDto;
     technic?: TechnicsDto;
     driver?: UsersDto;
+    conflictIdList?: ConflictIdListDto;
+    priorityIdList?: PriorityIdListDto;
 }
 
-function AppTechnic({appTechnic, techSheet, driverSheet, technic, driver}: AppTechnicProps) {
+function AppTechnic({appTechnic, techSheet, driverSheet, technic, driver, conflictIdList, priorityIdList}: AppTechnicProps) {
     return <div
         className="mt-2"
         style={{backgroundColor: "#e7eefa", textAlign: 'center'}}
     >
-        {getTechnicTitle(appTechnic, techSheet, technic)}
+        {getTechnicTitle(appTechnic, techSheet, technic, conflictIdList)}
         {driverSheet?.status ?
             <span
                 onClick={() => alert(`go to ${driver?.id}`)}
-            >{getDriverTitle(appTechnic, techSheet, driver)}
+            >{getDriverTitle(appTechnic, techSheet, driver, priorityIdList)}
                 <span style={{color: "black"}}> [{appTechnic.priority}/{techSheet?.count_application}]</span>
             </span> :
             <span className={style.AP_empty_title}>(Не назначен)</span>
