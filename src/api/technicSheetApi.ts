@@ -23,6 +23,9 @@ export interface ITechnicSheet{
     date?: string;
 }
 
+export interface PriorityIdListDto{
+    priority_id_list: number[];
+}
 
 export function useFetchTechnicSheet(current_day?: string) {
     const url_current_day = current_day?`?current_day=${current_day}`: '';
@@ -92,4 +95,16 @@ export function useUpdateTechnicSheet(id: number | string | undefined) {
     }
 
     return {handleUpdate, togglesStatus, setDriverSheet, isPending: updateTechnicSheetMutation.isPending};
+}
+
+export function useFetchPriorityIdList(current_day?: string) {
+    const url_current_day = current_day?`?current_day=${current_day}`: '';
+    const {data: priorityIdList, isLoading, isError} = useQuery({
+        queryKey: ['technicSheets', 'priorityId', current_day],
+        queryFn: async (meta) => {
+            const response = await instance.get<PriorityIdListDto[]>(`/api/get_priority_id_list/${url_current_day}`, {signal: meta.signal});
+            return response.data;
+        },
+    })
+    return {priorityIdList, isLoading, isError};
 }
