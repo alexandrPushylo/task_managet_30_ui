@@ -107,7 +107,7 @@ export function useFetchPriorityIdList(current_day?: string) {
     const {data: priorityIdList, isLoading, isError} = useQuery({
         queryKey: ['technicSheets', 'priorityId', current_day],
         queryFn: async (meta) => {
-            const response = await instance.get<PriorityIdListDto[]>(`/api/get_priority_id_list/${url_current_day}`, {signal: meta.signal});
+            const response = await instance.get<PriorityIdListDto>(`/api/get_priority_id_list/${url_current_day}`, {signal: meta.signal});
             return response.data;
         },
     })
@@ -118,7 +118,7 @@ export function useFetchConflictIdList(current_day?: string) {
     const {data: conflictIdList, isLoading, isError} = useQuery({
         queryKey: ['technicSheets', 'conflictId', current_day],
         queryFn: async (meta) => {
-            const response = await instance.get<ConflictIdListDto[]>(`/api/get_conflict_id_list/${url_current_day}`, {signal: meta.signal});
+            const response = await instance.get<ConflictIdListDto>(`/api/get_conflict_id_list/${url_current_day}`, {signal: meta.signal});
             return response.data;
         },
     })
