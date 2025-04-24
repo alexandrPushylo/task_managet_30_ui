@@ -26,7 +26,12 @@ export interface ITechnicSheet{
 export interface PriorityIdListDto{
     priority_id_list: number[];
 }
+export interface ConflictIdListDto{
+    conflict_technic_sheet: number[];
+}
 
+
+//  ============================================================================
 export function useFetchTechnicSheet(current_day?: string) {
     const url_current_day = current_day?`?current_day=${current_day}`: '';
     const {data: technicSheets, isLoading, isError} = useQuery({
@@ -107,4 +112,15 @@ export function useFetchPriorityIdList(current_day?: string) {
         },
     })
     return {priorityIdList, isLoading, isError};
+}
+export function useFetchConflictIdList(current_day?: string) {
+    const url_current_day = current_day?`?current_day=${current_day}`: '';
+    const {data: conflictIdList, isLoading, isError} = useQuery({
+        queryKey: ['technicSheets', 'conflictId', current_day],
+        queryFn: async (meta) => {
+            const response = await instance.get<ConflictIdListDto[]>(`/api/get_conflict_id_list/${url_current_day}`, {signal: meta.signal});
+            return response.data;
+        },
+    })
+    return {conflictIdList, isLoading, isError};
 }
