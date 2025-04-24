@@ -20,3 +20,23 @@
     height: min-content;
     overflow: hidden;
 }
+
+.AP_conflict_title{
+    color: red;
+}
+.AP_priority_title{
+    color: blue;
+}
+.AP_cancelled_title{
+    color: rgba(97,95,95,0.51);
+}
+.AP_isChecked_title{
+    color: rgba(97,95,95,0.51);
+}
+.AP_not_work_title{
+    text-decoration-line: line-through;
+    color: black;
+}
+.AP_empty_title{
+    color: darkorange;
+}
