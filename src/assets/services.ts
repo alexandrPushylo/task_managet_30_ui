@@ -8,6 +8,7 @@ import {
     infoItem, logoutItem, technicSheetItem, technicsItem, usersItem,
     workDayItem
 } from "./pagesData"
+import {useEffect} from "react";
 
 
 export function getUserMenuItems(userPost: EUserPost): IMenuItem[] {
@@ -85,4 +86,14 @@ export function getEUserPost(post: string | undefined): EUserPost {
         default:
             return EUserPost.EMPLOYEE
     }
+}
+
+export function useTextareaAutosize() {
+    const textareaCollection = document.getElementsByTagName("textarea");
+    useEffect(() => {
+        for (let i = 0; i < textareaCollection.length; i++) {
+            textareaCollection[i].style.height = 'auto';
+            textareaCollection[i].style.height = (textareaCollection[i].scrollHeight) + "px";
+        }
+    },);
 }
