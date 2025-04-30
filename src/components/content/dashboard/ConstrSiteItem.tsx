@@ -1,20 +1,17 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {ConstructionSiteDto} from "../../../api/constructionSiteApi";
 import style from "./ConstrSiteItem.module.css";
 import {AppTodayStatus} from "../../../assets/assets";
-import {ApplicationTodayDto, useFetchApplicationsToday} from "../../../api/applicationTodayApi";
-import {appDataDto} from "../../../api/applicationApi";
+import {ApplicationTodayDto} from "../../../api/applicationTodayApi";
+import {appDataDto, currentUserDto} from "../../../api/applicationApi";
 import {UsersDto} from "../../../api/usersApi";
 import {ApplicationTechnicDto} from "../../../api/applicationTechnicApi";
 import {TechnicsDto} from "../../../api/technicsApi";
 import {ConflictIdListDto, PriorityIdListDto, TechnicSheetDto} from "../../../api/technicSheetApi";
 import {DriverSheetDto} from "../../../api/driverSheetApi";
 import {ApplicationMaterialDto} from "../../../api/applicationMaterialApi";
-import {i} from "react-router/dist/production/fog-of-war-CvttGpNz";
 import {useTextareaAutosize} from "../../../assets/services";
 
-
-const FONT_SIZE = '10pt';
 
 
 function getBorderStyle(appStatus?: AppTodayStatus) {
@@ -67,7 +64,7 @@ function getTechnicTitle(appTechnic: ApplicationTechnicDto, techSheet?: TechnicS
     } else if (appTechnic.is_cancelled) {
         return <span className={style.AP_cancelled_title}><small>(<i
             className="fa-solid fa-xmark"></i>)</small> {technic?.title}</span>
-    } else if (techSheet?.id &&(conflictIdList?.conflict_technic_sheet.includes(techSheet.id))) {
+    } else if (techSheet?.id && (conflictIdList?.conflict_technic_sheet.includes(techSheet.id))) {
         return <span className={style.AP_conflict_title}> {technic?.title}</span>
     } else if (!techSheet?.status) {
         return <span className={style.AP_not_work_title}> {technic?.title}</span>
@@ -90,6 +87,7 @@ function getDriverTitle(appTechnic: ApplicationTechnicDto, techSheet?: TechnicSh
 
 
 interface CsItemProps {
+    currentUser?: currentUserDto;
     constrSiteItem: ConstructionSiteDto;
     appsToday?: ApplicationTodayDto[];
     appData?: appDataDto;
@@ -106,6 +104,7 @@ interface CsItemProps {
 
 export default function ConstrSiteItem(
     {
+        currentUser,
         constrSiteItem,
         appsToday,
         appData,
@@ -128,7 +127,14 @@ export default function ConstrSiteItem(
 
     const appTodayStatusColor = appToday?.status && appToday?.status !== 'approved' ? {color: 'black'} : {};
 
+    const FONT_SIZE = currentUser?.font_size + "pt";
+    const isShowAbsentApp = currentUser?.is_show_absent_app;
+    const isShowSavedApp = currentUser?.is_show_saved_app;
+
     useTextareaAutosize();
+
+    if (!isShowAbsentApp && (appToday?.status === 'absent' || appToday?.status === undefined)) {return <></>}
+    if (!isShowSavedApp && appToday?.status === 'saved') {return <></>}
 
     return <div
         className={"bg-transparent " + style.Component}
@@ -141,12 +147,12 @@ export default function ConstrSiteItem(
                     {getStatusStyle(appToday?.status)}
                     <p
                         className="card-title fw-bolder p-0 m-0 text-uppercase"
-                        style={{textAlign: "center", color: "black"}}
+                        style={{textAlign: "center", color: currentUser?.color_title}}
                     >{constrSiteItem?.address}</p>
                     <p className="m-0 ms-2" style={{textAlign: 'center', ...appTodayStatusColor}}
                     >
-                        <span className="fw-bolder">{appData?.current_date.weekday},</span>&nbsp;
-                        <span>{appData?.current_date.day} {appData?.current_date.month_name}</span>
+                        <span className="fw-bolder">{appData?.current_date?.weekday},</span>&nbsp;
+                        <span>{appData?.current_date?.day} {appData?.current_date?.month_name}</span>
                     </p>
                     {constrSiteItem.foreman &&
                         <p
@@ -156,11 +162,12 @@ export default function ConstrSiteItem(
                         </p>
                     }
                     <hr className="m-0"/>
-                    {appToday?.description && <AppDescription description={appToday?.description}/>}
+                    {appToday?.description &&
+                        <AppDescription description={appToday?.description} fontSize={FONT_SIZE}/>}
 
                     {appToday &&
                         <div className="card-text">
-                            {appTechnic &&
+                            {(appTechnic && currentUser?.is_show_technic_app) &&
                                 <div className="mt-1">
                                     {appTechnic.map((AT, index) => {
                                         const techSheet = technicSheets?.find(item => item.id === AT.technic_sheet);
@@ -176,6 +183,7 @@ export default function ConstrSiteItem(
                                             driver={driver}
                                             priorityIdList={priorityIdList}
                                             conflictIdList={conflictIdList}
+                                            fontSize={FONT_SIZE}
 
                                         />
                                     })}
@@ -186,6 +194,7 @@ export default function ConstrSiteItem(
                                     return <AppMaterial
                                         key={index}
                                         appMaterial={AM}
+                                        fontSize={FONT_SIZE}
                                     />
                                 })
                             }
@@ -202,10 +211,11 @@ export default function ConstrSiteItem(
 //  ============================================================================
 
 interface AppDescriptionProps {
-    description?: string
+    description?: string,
+    fontSize?: string
 }
 
-function AppDescription({description}: AppDescriptionProps) {
+function AppDescription({description, fontSize}: AppDescriptionProps) {
     return <div
         className="mt-1"
     >
@@ -214,7 +224,7 @@ function AppDescription({description}: AppDescriptionProps) {
             <textarea
                 readOnly={true}
                 className={"form-control border border-0 " + style.app_description}
-                style={{fontSize: FONT_SIZE}}
+                style={{fontSize: fontSize}}
                 value={description}
             ></textarea>
         </label>
@@ -226,9 +236,10 @@ interface AppTechnicDescriptionProps {
     description?: string;
     is_cancelled: boolean;
     isChecked: boolean;
+    fontSize?: string
 }
 
-function AppTechnicDescription({description, is_cancelled, isChecked}: AppTechnicDescriptionProps) {
+function AppTechnicDescription({description, is_cancelled, isChecked, fontSize}: AppTechnicDescriptionProps) {
     const statusStyle = is_cancelled ? style.AP_cancelled_title : isChecked ? style.AP_isChecked_title : ""
 
 
@@ -238,7 +249,7 @@ function AppTechnicDescription({description, is_cancelled, isChecked}: AppTechni
         <textarea
             readOnly={true}
             className={"form-control border  " + style.app_description + ' ' + statusStyle}
-            style={{fontSize: FONT_SIZE}}
+            style={{fontSize: fontSize}}
             value={description}
         ></textarea>
     </label>
@@ -252,9 +263,19 @@ interface AppTechnicProps {
     driver?: UsersDto;
     conflictIdList?: ConflictIdListDto;
     priorityIdList?: PriorityIdListDto;
+    fontSize?: string
 }
 
-function AppTechnic({appTechnic, techSheet, driverSheet, technic, driver, conflictIdList, priorityIdList}: AppTechnicProps) {
+function AppTechnic({
+                        appTechnic,
+                        techSheet,
+                        driverSheet,
+                        technic,
+                        driver,
+                        conflictIdList,
+                        priorityIdList,
+                        fontSize
+                    }: AppTechnicProps) {
     return <div
         className="mt-2"
         style={{backgroundColor: "#e7eefa", textAlign: 'center'}}
@@ -272,15 +293,17 @@ function AppTechnic({appTechnic, techSheet, driverSheet, technic, driver, confli
             description={appTechnic.description}
             is_cancelled={appTechnic.is_cancelled}
             isChecked={appTechnic.isChecked}
+            fontSize={fontSize}
         />}
     </div>
 }
 
 interface AppMaterialProps {
     appMaterial: ApplicationMaterialDto
+    fontSize?: string
 }
 
-function AppMaterial({appMaterial}: AppMaterialProps) {
+function AppMaterial({appMaterial, fontSize}: AppMaterialProps) {
     const appStatusStyle = appMaterial.isChecked ? {fontSize: 'small', color: "green"} : {
         fontSize: 'small',
         color: "red"
@@ -294,10 +317,10 @@ function AppMaterial({appMaterial}: AppMaterialProps) {
         >Список материалов: </span>
         <span style={appStatusStyle}>{appStatusTitle}</span>
         <textarea
-            className={"form-control border border-1 " + style.app_description + appStatusBorder}
+            className={"form-control border border-1 " + style.app_description + ' ' + appStatusBorder}
             readOnly={true}
             value={appMaterial.description}
-            style={{fontSize: FONT_SIZE}}
+            style={{fontSize: fontSize}}
         ></textarea>
     </div>
 }

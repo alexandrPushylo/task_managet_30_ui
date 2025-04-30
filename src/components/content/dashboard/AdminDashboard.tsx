@@ -4,7 +4,7 @@ import ConstrSiteItem from "./ConstrSiteItem";
 import {useFetchApplicationsToday} from "../../../api/applicationTodayApi";
 import {useAppSelector} from "../../../store/store";
 import {applicationSlice} from "../../../store/slices/applicationSlice";
-import {useAppData} from "../../../api/applicationApi";
+import {useAppData, useCurrentUser} from "../../../api/applicationApi";
 import {useFetchDriverList, useFetchForemanList} from "../../../api/usersApi";
 import {useFetchApplicationTechnics} from "../../../api/applicationTechnicApi";
 import {useFetchConflictIdList, useFetchPriorityIdList, useFetchTechnicSheet} from "../../../api/technicSheetApi";
@@ -14,6 +14,7 @@ import {useFetchApplicationMaterials} from "../../../api/applicationMaterialApi"
 
 
 export default function AdminDashboard() {
+    const {currentUser} = useCurrentUser();
     const currentDay = useAppSelector(applicationSlice.selectors.selectCurrentDay);
     const {constrSites, isLoading} = useFetchConstructionSites();
     const {appsToday} = useFetchApplicationsToday(currentDay);
@@ -36,6 +37,7 @@ export default function AdminDashboard() {
                 if (!CS_Item.isArchive && CS_Item.status){
                     return <ConstrSiteItem
                         key={index}
+                        currentUser={currentUser}
                         constrSiteItem={CS_Item}
                         appsToday={appsToday}
                         appData={appData}
