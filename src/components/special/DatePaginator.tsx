@@ -10,8 +10,10 @@ export default function DatePaginator() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(applicationSlice.actions.setCurrentDay(appData?.current_date.date))
-    }, [appData?.current_date.date, dispatch]);
+        if (appData?.current_date){
+            dispatch(applicationSlice.actions.setCurrentDay(appData?.current_date.date))
+        }        
+    }, [appData?.current_date, dispatch]);
 
     function getPrevDay(currentDay?: string) {
         dispatch(getPrevOrNextCurrentDay({current_day: currentDay??'', side: "prev"}));
@@ -75,7 +77,7 @@ function ItemPaginator({appData, current_day, dispatch, workDays}: ItemPaginator
     return <>
         {workDays && workDays.map((workDay, index) => {
             const classStatus = workDay.status ? " text-success " : " text-danger ";
-            const classToday = appData?.today.date === workDay.date ? " fw-bold text-dark " : "";
+            const classToday = appData?.today?.date === workDay.date ? " fw-bold text-dark " : "";
             const classCurrentDay = current_day === workDay.date ? " border border-2 border-success " : "";
 
             return <li className="page-item ms-1 me-1" key={index}>

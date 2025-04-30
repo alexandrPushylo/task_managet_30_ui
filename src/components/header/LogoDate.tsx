@@ -13,9 +13,9 @@ function LogoDate() {
         <div
             className="nav-logo m-0 ms-2 p-0"
             style={{textAlign: "center", width: 'min-content'}}>
-            <span style={{fontSize: '14pt'}}>{appData?.today.day}</span>
+            <span style={{fontSize: '14pt'}}>{appData?.today?.day}</span>
             <hr className="m-0"/>
-            <span>{appData?.today.weekday}</span>
+            <span>{appData?.today?.weekday}</span>
         </div>
     );
 }
