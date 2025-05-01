@@ -189,7 +189,7 @@ export default function ConstrSiteItem(
                                     })}
                                 </div>
                             }
-                            {appMaterial &&
+                            {(appMaterial && currentUser?.is_show_material_app) &&
                                 appMaterial.map((AM, index) => {
                                     return <AppMaterial
                                         key={index}
