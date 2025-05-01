@@ -1,7 +1,8 @@
-import React from 'react';
-import {useCurrentUser, useUpdateCurrentUser} from "../../api/applicationApi";
+import React, {useState} from 'react';
+import {currentUserDto, useCurrentUser, useUpdateCurrentUser} from "../../api/applicationApi";
 
 export default function ButtonViewProps() {
+    const {currentUser} = useCurrentUser();
     return <>
         <button
             type="button"
@@ -10,14 +11,20 @@ export default function ButtonViewProps() {
             data-bs-target="#view_props"
         >Настройки отображения
         </button>
-        <ModalViewProps/>
+        {currentUser && <ModalViewProps currentUser={currentUser}/>}
+
     </>
 }
 
-function ModalViewProps() {
-    const {currentUser} = useCurrentUser();
-    const updateUser = useUpdateCurrentUser(currentUser?.id)
-    const post = currentUser?.post;
+interface ModalViewPropsProps {
+    currentUser: currentUserDto;
+}
+
+function ModalViewProps({currentUser}: ModalViewPropsProps) {
+
+    const [curUser, setCurUser] = useState(currentUser);
+    const updateUser = useUpdateCurrentUser(currentUser.id)
+    const post = curUser.post;
     return <div className="modal fade"
                 id="view_props"
                 data-bs-backdrop="static"
@@ -41,8 +48,11 @@ function ModalViewProps() {
                                 <input type="checkbox"
                                        role="switch"
                                        className="form-check-input mx-1"
-                                       onChange={e => {updateUser.toggle_is_show_saved_app(currentUser.is_show_saved_app)}}
-                                       checked={currentUser.is_show_saved_app}
+                                       onChange={e => {
+                                           setCurUser({...curUser, is_show_saved_app: !curUser.is_show_saved_app});
+                                           updateUser.toggle_is_show_saved_app(curUser.is_show_saved_app);
+                                       }}
+                                       checked={curUser.is_show_saved_app}
                                 />
                                 <span className="ms-2">Показывать сохраненные заявки</span>
                             </div>
@@ -52,8 +62,12 @@ function ModalViewProps() {
                                 <input type="checkbox"
                                        role="switch"
                                        className="form-check-input mx-1"
-                                       checked={currentUser.is_show_absent_app}
-                                       onChange={event => updateUser.toggle_is_show_absent_app(currentUser.is_show_absent_app)}
+                                       checked={curUser.is_show_absent_app}
+                                       onChange={event => {
+                                           setCurUser({...curUser, is_show_absent_app: !curUser.is_show_absent_app});
+                                           updateUser.toggle_is_show_absent_app(curUser.is_show_absent_app);
+                                       }
+                                       }
                                 />
                                 <span className="ms-2">Показывать отсутствующие заявки</span>
                             </div>
@@ -62,8 +76,12 @@ function ModalViewProps() {
                             <input type="checkbox"
                                    role="switch"
                                    className="form-check-input mx-1"
-                                   checked={currentUser.is_show_technic_app}
-                                   onChange={event => updateUser.toggle_is_show_technic_app(currentUser.is_show_technic_app)}
+                                   checked={curUser.is_show_technic_app}
+                                   onChange={event => {
+                                       setCurUser({...curUser, is_show_technic_app: !curUser.is_show_technic_app});
+                                       updateUser.toggle_is_show_technic_app(curUser.is_show_technic_app);
+                                   }
+                                   }
                             />
                             <span className="ms-2">Показывать заявки на технику</span>
                         </div>
@@ -71,8 +89,12 @@ function ModalViewProps() {
                             <input type="checkbox"
                                    role="switch"
                                    className="form-check-input mx-1"
-                                   checked={currentUser.is_show_material_app}
-                                   onChange={event => updateUser.toggle_is_show_material_app(currentUser.is_show_material_app)}
+                                   checked={curUser.is_show_material_app}
+                                   onChange={event => {
+                                       setCurUser({...curUser, is_show_material_app: !curUser.is_show_material_app});
+                                       updateUser.toggle_is_show_material_app(curUser.is_show_material_app);
+                                   }
+                                   }
                             />
                             <span className="ms-2">Показывать заявки на материалы</span>
                         </div>
@@ -82,8 +104,12 @@ function ModalViewProps() {
                 <div className="mb-1 mt-1" style={{textAlign: 'left'}}>
                     <input type="color"
                            className="form-control-color ms-3 p-0"
-                           value={currentUser?.color_title}
-                           onChange={event => updateUser.set_color_title(event.target.value)}
+                           value={curUser.color_title}
+                           onChange={event => {
+                               setCurUser({...curUser, color_title: event.target.value});
+                               updateUser.set_color_title(event.target.value);
+                           }
+                           }
                     />
                     <span className="ms-2">Цвет названия объекта</span>
                 </div>
@@ -94,20 +120,19 @@ function ModalViewProps() {
                            className="form-control ms-3"
                            min={6}
                            max={20}
-                           value={currentUser?.font_size}
-                           onChange={event => updateUser.set_font_size(parseInt(event.target.value))}
+                           value={curUser.font_size}
+                           onChange={event => {
+                               setCurUser({...curUser, font_size: parseInt(event.target.value)});
+                               updateUser.set_font_size(parseInt(event.target.value));
+                           }
+                           }
                     />
                     <span className="ms-2">Размер шрифта для заявки</span>
                 </div>
 
 
                 <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="button"
-                            className="btn btn-primary"
-                            onClick={() => {
-                            }}>Сохранить
-                    </button>
+                    <button type="button" className="btn btn-outline-success px-5" data-bs-dismiss="modal">OK</button>
                 </div>
             </div>
         </div>
