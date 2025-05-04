@@ -21,6 +21,27 @@ export interface IApplicationToday {
     isArchive?: boolean;
 }
 
+export interface StatusListAppTodayDto {
+    status_list_application_today: {
+        absent: number[];
+        saved: number[];
+        submitted: number[];
+        approved: number[];
+        send: number[];
+    };
+}
+
+export function useFetchStatusListAppToday(current_day?: string) {
+    const url_current_day = current_day?`?current_day=${current_day}`: '';
+    const {data: statusList, isLoading, isError} = useQuery({
+        queryKey: ['statusListAppToday', current_day],
+        queryFn: async (meta) => {
+            const response = await instance.get<StatusListAppTodayDto>(`/api/get_status_list_app_today/${url_current_day}`, {signal: meta.signal});
+            return response.data;
+        },
+    })
+    return {statusList, isLoading, isError};
+}
 export function useFetchApplicationsToday(current_day?: string) {
     const url_current_day = current_day?`?current_day=${current_day}`: '';
     const {data: appsToday, isLoading, isError} = useQuery({
