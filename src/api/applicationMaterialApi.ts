@@ -1,8 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {instance} from "./api";
-import {useNavigate} from "react-router";
-import {AppTodayStatus} from "../assets/assets";
-import {IApplicationToday} from "./applicationTodayApi";
 
 
 export interface ApplicationMaterialDto {

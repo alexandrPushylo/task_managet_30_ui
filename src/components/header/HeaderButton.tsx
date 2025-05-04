@@ -4,7 +4,7 @@ import {NavLink} from "react-router";
 import {useFetchConflictIdList} from "../../api/technicSheetApi";
 import {useAppSelector} from "../../store/store";
 import {applicationSlice} from "../../store/slices/applicationSlice";
-import {useFetchStatusListAppToday} from "../../api/applicationTodayApi";
+import {useFetchStatusListAppToday} from "../../api/ApplicationTodayApi";
 import {useAppData, useCurrentUser} from "../../api/applicationApi";
 
 

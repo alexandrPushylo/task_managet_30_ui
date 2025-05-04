@@ -2,7 +2,7 @@ import React from 'react';
 import {ConstructionSiteDto} from "../../../api/constructionSiteApi";
 import style from "./ConstrSiteItem.module.css";
 import {AppTodayStatus} from "../../../assets/assets";
-import {ApplicationTodayDto} from "../../../api/applicationTodayApi";
+import {ApplicationTodayDto} from "../../../api/ApplicationTodayApi";
 import {appDataDto, currentUserDto} from "../../../api/applicationApi";
 import {UsersDto} from "../../../api/usersApi";
 import {ApplicationTechnicDto} from "../../../api/applicationTechnicApi";

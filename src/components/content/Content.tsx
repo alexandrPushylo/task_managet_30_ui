@@ -1,15 +1,13 @@
-import React, {CSSProperties, JSX, useEffect, useState} from 'react';
+import React, {CSSProperties, JSX} from 'react';
 import {Route, Routes} from "react-router";
 import Users from "./users/Users";
 import Dashboard from "./dashboard/Dashboard";
 import User from "./users/User";
-import {useAppDispatch, useAppSelector} from "../../store/store";
+import {useAppSelector} from "../../store/store";
 import {applicationSlice} from "../../store/slices/applicationSlice";
 import Login from "./Login";
 import Logout from "./Logout";
-import Technics from "./technics/Technics";
-import {useAppData} from "../../api/applicationApi";
-import Loader from "../loaders/Loader";
+import Technics from "./technics/technics";
 import Technic from "./technics/Technic";
 import ConstructionSites from "./constructionSite/ConstructionSites";
 import ConstructionSite from "./constructionSite/ConstructionSite";
@@ -23,7 +21,6 @@ const cssStyle: CSSProperties = {
 }
 
 function Content() {
-    // const {appData, isLoading} = useAppData();
     const isAuthenticated = useAppSelector(applicationSlice.selectors.selectIsAuthenticated);
 
     const defComponent = (component: JSX.Element) => isAuthenticated ? component : <Login/>;

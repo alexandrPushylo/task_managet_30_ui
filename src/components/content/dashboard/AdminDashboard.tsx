@@ -1,7 +1,7 @@
 import React from 'react';
 import {useFetchConstructionSites} from "../../../api/constructionSiteApi";
 import ConstrSiteItem from "./ConstrSiteItem";
-import {useFetchApplicationsToday} from "../../../api/applicationTodayApi";
+import {useFetchApplicationsToday} from "../../../api/ApplicationTodayApi";
 import {useAppSelector} from "../../../store/store";
 import {applicationSlice} from "../../../store/slices/applicationSlice";
 import {useAppData, useCurrentUser} from "../../../api/applicationApi";
@@ -55,7 +55,7 @@ export default function AdminDashboard() {
                             conflictIdList={conflictIdList}
                             priorityIdList={priorityIdList}
                         />
-                    }
+                    }else {return<></>}
                 })
                 }
             </Masonry>
