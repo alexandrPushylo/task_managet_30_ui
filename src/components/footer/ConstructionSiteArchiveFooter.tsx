@@ -4,20 +4,18 @@ import {useNavigate} from "react-router";
 const cssStyle: CSSProperties = {
     margin: "auto",
 }
-
-function UsersFooter() {
+export default function ConstructionSiteArchivesFooter(){
     const navigate = useNavigate();
     return (
         <div style={cssStyle}>
             <button
-                className="btn btn-success"
+                className="btn btn-sm btn-primary me-1"
                 type="button"
                 onClick={() => {
-                    navigate("/user");
+                    navigate("/construction_sites");
                 }}
-            >Добавить пользователя</button>
+            >Список объектов
+            </button>
         </div>
     );
 }
-
-export default UsersFooter;

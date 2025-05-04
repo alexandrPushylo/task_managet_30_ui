@@ -1,0 +1,25 @@
+.Component{
+    background-color: rgba(247, 247, 248, 0.75)
+}
+.Title{
+    font-size: 20pt;
+    text-decoration: underline;
+}
+
+.ConstructionSiteContainer{
+    width: 20rem;
+}
+.ConstructionSiteItem{
+    background-color: rgba(247, 247, 248, 0.75)
+}
+
+.showed_item{
+    margin: 0;
+    border-width: medium;
+    border-color: #1f9a1a;
+}
+.hidden_item{
+    margin: 0;
+    border-width: medium;
+    border-color: #9a1a1a;
+}

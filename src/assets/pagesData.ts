@@ -3,17 +3,17 @@ import {IMenuItem} from "./assets"
 
 export const adminItem: IMenuItem = {
     name: "Админ страница",
-    href: "/admin/",
+    href: "/admin",
     afterSeparated: true
 }
 export const infoItem: IMenuItem = {
     name: "Info page",
-    href: "/info/",
+    href: "/info",
     afterSeparated: false
 }
 export const errorItem: IMenuItem = {
     name: "Error page",
-    href: "/error/",
+    href: "/error",
     afterSeparated: false
 }
 export const applicationTechnicItem: IMenuItem = {
@@ -23,22 +23,22 @@ export const applicationTechnicItem: IMenuItem = {
 }
 export const constructionSiteItem: IMenuItem = {
     name: "Объекты",
-    href: "",
+    href: "/construction_sites",
     afterSeparated: false
 }
 export const workDayItem: IMenuItem = {
     name: "Табель Рабочие дни",
-    href: "",
+    href: "/work_days",
     afterSeparated: true
 }
 export const driverSheetItem: IMenuItem = {
     name: "Табель Водители",
-    href: "",
+    href: "/driver_sheet",
     afterSeparated: false
 }
 export const technicSheetItem: IMenuItem = {
     name: "Табель Техника",
-    href: "",
+    href: "/technic_sheet",
     afterSeparated: false
 }
 export const technicsItem: IMenuItem = {

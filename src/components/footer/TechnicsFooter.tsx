@@ -13,7 +13,7 @@ function TechnicsFooter() {
                 className="btn btn-success"
                 type="button"
                 onClick={() => {
-                    navigate("/technic/");
+                    navigate("/technic");
                 }}
             >Добавить технику</button>
         </div>

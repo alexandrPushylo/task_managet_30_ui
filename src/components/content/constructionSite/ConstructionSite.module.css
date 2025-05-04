@@ -1,0 +1,14 @@
+.Component{
+    width: 20rem;
+    /*padding-left: 10px;*/
+    /*border-left: 5px solid #494f54;*/
+    /*width: auto;*/
+    padding: 5px;
+    padding-left: 10px;
+    border: 1px solid black;
+    /*border-left: 5px solid #494f54;*/
+    border-radius: 5px;
+    box-shadow: 5px 5px 20px 5px;
+}
+
+

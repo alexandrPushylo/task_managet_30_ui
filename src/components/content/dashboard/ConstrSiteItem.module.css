@@ -1,0 +1,42 @@
+.Component{
+    width: 20rem;
+    margin-bottom: 30px;
+}
+.item_border{
+    border: 5px solid;
+    border-radius: 10px;
+    box-shadow: 5px 5px 20px 5px;
+}
+.if_not_appT{
+    color: rgba(0,0,0,0.26);
+}
+.app_status{
+    margin: 0 0 0;
+    font-size: 11pt;
+    text-align: center;
+    font-weight: bolder;
+}
+.app_description{
+    height: min-content;
+    overflow: hidden;
+}
+
+.AP_conflict_title{
+    color: red;
+}
+.AP_priority_title{
+    color: blue;
+}
+.AP_cancelled_title{
+    color: rgba(97,95,95,0.51);
+}
+.AP_isChecked_title{
+    color: rgba(97,95,95,0.51);
+}
+.AP_not_work_title{
+    text-decoration-line: line-through;
+    color: black;
+}
+.AP_empty_title{
+    color: darkorange;
+}

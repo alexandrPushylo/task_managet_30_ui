@@ -1,5 +1,5 @@
-import React, {CSSProperties, useEffect, useState} from 'react';
-import {IForeman, IUser, IPosts, EUserPost, PostTitle} from "../../../assets/assets";
+import React, {useEffect, useState} from 'react';
+import {IPosts, EUserPost, PostTitle} from "../../../assets/assets";
 import {useNavigate, useParams} from "react-router";
 import style from "./User.module.css";
 
@@ -40,7 +40,7 @@ const userInitState: IUserState = {
 }
 
 
-function User() {
+export default function User() {
 
     const navigate = useNavigate();
     const {userId} = useParams<{ userId: string }>()
@@ -51,11 +51,18 @@ function User() {
     const deleteUser = useDeleteUser(userId);
 
     const {user: userData, isLoading} = useFetchUserById(userId);
-    const {foremanList} = useFetchForemanList();
-    const {posts} = useFetchUserPosts();
-
 
     const [user, setUser] = useState(userInitState);
+
+    function setPost(post: string) {
+        const userPost = getEUserPost(post);
+        setUser({...user, post: userPost})
+    }
+
+    function setForeman(foremanId: string | undefined) {
+        const supervisor_user_id = foremanId ? parseInt(foremanId) : undefined;
+        setUser({...user, supervisor_user_id: supervisor_user_id});
+    }
 
     useEffect(() => {
         setUser(userData ?? userInitState)
@@ -79,7 +86,7 @@ function User() {
                                    onChange={(e) => {
                                        setUser({...user, username: e.target.value})
                                    }}
-                                   name="username" value={user.username}
+                                   name="username" value={user?.username}
                             />
                         </label>
                     </div>
@@ -89,7 +96,7 @@ function User() {
                                    onChange={e => {
                                        setUser({...user, password: e.target.value})
                                    }}
-                                   name="password" value={user.password}
+                                   name="password" value={user?.password}
                             />
                         </label>
                     </div>
@@ -100,7 +107,7 @@ function User() {
                                    onChange={(e) => {
                                        setUser({...user, first_name: e.target.value})
                                    }}
-                                   value={user.first_name}
+                                   value={user?.first_name}
                                    placeholder="Петр" required/>
                         </label>
                     </div>
@@ -110,7 +117,7 @@ function User() {
                                    onChange={(e) => {
                                        setUser({...user, last_name: e.target.value})
                                    }}
-                                   value={user.last_name}
+                                   value={user?.last_name}
                                    placeholder="напр: Петров" required/>
                         </label>
                     </div>
@@ -121,53 +128,21 @@ function User() {
                             </span>
                             <input type="tel" className="form-control" name="telephone"
                                    onChange={event => setUser({...user, telephone: event.target.value})}
-                                   value={user.telephone}
+                                   value={user?.telephone}
                                    placeholder="+375(25)1234567"
                             />
                         </label>
                     </div>
                     <div className="mt-2">
                         <label>Должность
-                            <select name="post" className="form-control"
-                                    defaultValue={user.post}
-                                    onChange={e => setUser({...user, post: getEUserPost(e.target.value)})}
-                            >
-                                {posts?.map((post: IPosts, index) => {
-                                    return (
-                                        <option
-                                            value={post.title}
-                                            key={index}
-                                            selected={user.post === post.title}
-                                        >{post.description}</option>
-                                    )
-                                })
-                                }
-                            </select>
+                            <UserPostSelect userPost={user.post} setPost={setPost}/>
                         </label>
                     </div>
 
                     {isMaster &&
                         <div className="mt-2">
                             <label>Прораб
-                                <select name="supervisor_user_id" className="form-control"
-                                        required={true}
-                                        defaultValue={user.supervisor_user_id}
-                                        onChange={e => setUser({
-                                            ...user,
-                                            supervisor_user_id: parseInt(e.target.value)
-                                        })}
-                                >
-                                    <option key={"01"} value={undefined}></option>
-                                    {foremanList?.map((foreman: IUserState) => {
-                                        return (
-                                            <option
-                                                key={foreman.id}
-                                                value={foreman.id}
-                                                selected={user.supervisor_user_id === foreman.id}
-                                            >{foreman.last_name} {foreman.first_name}</option>
-                                        )
-                                    })}
-                                </select>
+                                <ForemanSelect foremanId={user.supervisor_user_id} setForeman={setForeman}/>
                             </label>
                         </div>}
 
@@ -200,7 +175,58 @@ function User() {
                 </form>}
         </div>
     );
-
 }
 
-export default User;
+
+interface UserPostSelectProps {
+    userPost: string;
+    setPost: (post: string) => void;
+}
+
+function UserPostSelect({userPost, setPost}: UserPostSelectProps) {
+    const {posts} = useFetchUserPosts();
+
+    return <select
+        name="post"
+        className="form-control"
+        required={true}
+        defaultValue={userPost ?? 'employee'}
+        onChange={e => setPost(e.target.value)}
+    >
+        {posts?.map((post: IPosts, index) => {
+            return (
+                <option
+                    value={post?.title}
+                    key={index}
+                    selected={userPost === post.title}
+                >{post?.description}</option>
+            )
+        })
+        }
+    </select>
+}
+
+interface ForemanSelectProps {
+    foremanId: number | undefined,
+    setForeman: (foremanId: string | undefined) => void
+}
+function ForemanSelect({foremanId, setForeman}: ForemanSelectProps) {
+    const {foremanList} = useFetchForemanList();
+
+    return <select name="supervisor_user_id" className="form-control"
+                   required={true}
+                   defaultValue={foremanId}
+                   onChange={e => setForeman(e.target.value)}
+    >
+        <option key={"01"} value={undefined} selected={!!foremanId}></option>
+        {foremanList?.map((foreman: IUserState) => {
+            return (
+                <option
+                    key={foreman.id}
+                    value={foreman?.id}
+                    selected={foremanId === foreman.id}
+                >{foreman?.last_name} {foreman?.first_name}</option>
+            )
+        })}
+    </select>
+}
