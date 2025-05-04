@@ -46,16 +46,18 @@ function Dashboard() {
                 >
                     {appData?.view_mode === 'view_mode_archive' && <LabelArchive/>}
                     {appData && <LabelCurrentDay current_date={appData.current_date}/>}
-                    {currentUser?.post==='administrator' && <ButtonChangeAcceptMode
+                    {currentUser?.post === 'administrator' && <ButtonChangeAcceptMode
                         acceptMode={appData?.accept_mode}
                         currentDay={currentDay}
                     />}
-                    <ButtonViewProps />
+                    <ButtonViewProps/>
+                </div>
+                <div className="mt-3">
+                    {currentUser &&
+                        getDashboard(currentUser.post)
+                    }
                 </div>
 
-                {currentUser &&
-                    getDashboard(currentUser.post)
-                }
             </div> :
             <Loader/>
         }
