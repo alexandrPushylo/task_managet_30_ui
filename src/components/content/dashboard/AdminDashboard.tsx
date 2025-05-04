@@ -34,28 +34,28 @@ export default function AdminDashboard() {
     const {foremanList} = useFetchForemanList();
     const {driverList} = useFetchDriverList();
 
+    const currentConstrSites = constrSites?.filter(item => !item.isArchive && item.status);
+
     return (
-        <ResponsiveMasonry columnsCountBreakPoints = {ColumnsCountBreakPoints}>
+        <ResponsiveMasonry columnsCountBreakPoints={ColumnsCountBreakPoints}>
             <Masonry>
-                {constrSites?.map((CS_Item, index) => {
-                    if (!CS_Item.isArchive && CS_Item.status) {
-                        return <ConstrSiteItem
-                            key={index}
-                            currentUser={currentUser}
-                            constrSiteItem={CS_Item}
-                            appsToday={appsToday}
-                            appData={appData}
-                            foremanList={foremanList}
-                            appTechnics={appTechnics}
-                            appMaterials={appMaterials}
-                            technics={technics}
-                            technicSheets={technicSheets}
-                            driverSheets={driverSheets}
-                            driverList={driverList}
-                            conflictIdList={conflictIdList}
-                            priorityIdList={priorityIdList}
-                        />
-                    }else {return<></>}
+                {currentConstrSites?.map((CS_Item, index) => {
+                    return <ConstrSiteItem
+                        key={index}
+                        currentUser={currentUser}
+                        constrSiteItem={CS_Item}
+                        appsToday={appsToday}
+                        appData={appData}
+                        foremanList={foremanList}
+                        appTechnics={appTechnics}
+                        appMaterials={appMaterials}
+                        technics={technics}
+                        technicSheets={technicSheets}
+                        driverSheets={driverSheets}
+                        driverList={driverList}
+                        conflictIdList={conflictIdList}
+                        priorityIdList={priorityIdList}
+                    />
                 })
                 }
             </Masonry>
