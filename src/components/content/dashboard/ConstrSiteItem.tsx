@@ -11,7 +11,7 @@ import {ConflictIdListDto, PriorityIdListDto, TechnicSheetDto} from "../../../ap
 import {DriverSheetDto} from "../../../api/driverSheetApi";
 import {ApplicationMaterialDto} from "../../../api/applicationMaterialApi";
 import {useTextareaAutosize} from "../../../assets/services";
-
+import {href} from "react-router";
 
 
 function getBorderStyle(appStatus?: AppTodayStatus) {
@@ -133,8 +133,12 @@ export default function ConstrSiteItem(
 
     useTextareaAutosize();
 
-    if (!isShowAbsentApp && (appToday?.status === 'absent' || appToday?.status === undefined)) {return <></>}
-    if (!isShowSavedApp && appToday?.status === 'saved') {return <></>}
+    if (!isShowAbsentApp && (appToday?.status === 'absent' || appToday?.status === undefined)) {
+        return <></>
+    }
+    if (!isShowSavedApp && appToday?.status === 'saved') {
+        return <></>
+    }
 
     return <div
         className={"bg-transparent " + style.Component}
@@ -202,6 +206,14 @@ export default function ConstrSiteItem(
                     }
 
                 </div>
+
+                {appData?.view_mode !== 'view_mode_archive' &&
+                    <CardFooter
+                        appToday={appToday}
+                        constrSiteItem={constrSiteItem}
+                    />
+                }
+
             </div>
         </div>
     </div>
@@ -326,3 +338,74 @@ function AppMaterial({appMaterial, fontSize}: AppMaterialProps) {
 }
 
 //  ============================================================================
+
+interface CardFooterProps {
+    appToday?: ApplicationTodayDto;
+    constrSiteItem?: ConstructionSiteDto;
+}
+function CardFooter({appToday, constrSiteItem}: CardFooterProps) {
+    return <div
+    >
+        <hr className="m-0 p-0"/>
+        <div className="card-body p-0">
+            <div className="my-2 px-2" style={{textAlign: "center"}}>
+                {appToday ? <div>
+                    {appToday.status === 'saved' ?
+                        <p className="m-0 fw-bolder text-warning">Ожидание подачи заявки</p> :
+                        <div>
+                            <BtnDelete appTodayId={appToday.id}/>
+                            <BtnEdit appTodayId={appToday.id}/>
+                        </div>
+                    }
+                    {appToday.status === 'submitted' && <BtnApprove appTodayId={appToday.id}/>}
+                    {appToday.status === 'approved' && <BtnSend appTodayId={appToday.id}/>}
+                </div>:
+                    <div className="row m-0 p-0"><BtnCreate constrSiteId={constrSiteItem?.id}/></div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+}
+
+interface BtnProps {
+    appTodayId?: number;
+    constrSiteId?: number;
+}
+function BtnDelete({appTodayId}: BtnProps) {
+    return <button
+        type="button"
+        className="btn btn-outline-danger mx-1"
+        onClick={() => alert(`delete ${appTodayId}`)}
+    ><i className="fa-solid fa-trash"></i></button>
+}
+function BtnEdit({appTodayId}: BtnProps) {
+    return <button
+        type="button"
+        className="btn btn-outline-primary px-5 mx-1"
+        onClick={() => alert(`edit ${appTodayId}`)}
+    ><i className="fa-regular fa-pen-to-square"></i></button>
+}
+function BtnCreate({constrSiteId}: BtnProps) {
+    return <button
+        type="button"
+        className="btn btn-outline-primary"
+        onClick={() => alert(`create ${constrSiteId}`)}
+    ><i className="fa-solid fa-plus"></i></button>
+}
+function BtnApprove({appTodayId}: BtnProps) {
+    return <button
+        type="button"
+        className="btn btn-outline-success px-5 mx-1"
+        onClick={() => alert(`approveStatus ${appTodayId}`)}
+    ><i className="fa-solid fa-check"></i></button>
+}
+function BtnSend({appTodayId}: BtnProps) {
+    return <button
+        type="button"
+        className="btn btn-outline-info px-5 mx-1"
+        onClick={() => alert(`sendStatus ${appTodayId}`)}
+    ><i className="fa-solid fa-paper-plane"></i></button>
+}
+
