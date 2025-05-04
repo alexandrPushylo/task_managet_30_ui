@@ -11,12 +11,15 @@ import {useFetchConflictIdList, useFetchPriorityIdList, useFetchTechnicSheet} fr
 import {useFetchDriverSheet} from "../../../api/driverSheetApi";
 import {useFetchTechnics} from "../../../api/technicsApi";
 import {useFetchApplicationMaterials} from "../../../api/applicationMaterialApi";
+// @ts-ignore
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
+import {ColumnsCountBreakPoints} from "../../../assets/assets";
 
 
 export default function AdminDashboard() {
     const {currentUser} = useCurrentUser();
     const currentDay = useAppSelector(applicationSlice.selectors.selectCurrentDay);
-    const {constrSites, isLoading} = useFetchConstructionSites();
+    const {constrSites} = useFetchConstructionSites();
     const {appsToday} = useFetchApplicationsToday(currentDay);
     const {appData} = useAppData({current_day: currentDay});
     const {appTechnics} = useFetchApplicationTechnics(currentDay)
@@ -32,28 +35,30 @@ export default function AdminDashboard() {
     const {driverList} = useFetchDriverList();
 
     return (
-        <div className="mt-3 mx-auto">
-            {constrSites?.map((CS_Item, index) => {
-                if (!CS_Item.isArchive && CS_Item.status){
-                    return <ConstrSiteItem
-                        key={index}
-                        currentUser={currentUser}
-                        constrSiteItem={CS_Item}
-                        appsToday={appsToday}
-                        appData={appData}
-                        foremanList={foremanList}
-                        appTechnics={appTechnics}
-                        appMaterials={appMaterials}
-                        technics={technics}
-                        technicSheets={technicSheets}
-                        driverSheets={driverSheets}
-                        driverList={driverList}
-                        conflictIdList={conflictIdList}
-                        priorityIdList={priorityIdList}
-                    />
+        <ResponsiveMasonry columnsCountBreakPoints = {ColumnsCountBreakPoints}>
+            <Masonry>
+                {constrSites?.map((CS_Item, index) => {
+                    if (!CS_Item.isArchive && CS_Item.status) {
+                        return <ConstrSiteItem
+                            key={index}
+                            currentUser={currentUser}
+                            constrSiteItem={CS_Item}
+                            appsToday={appsToday}
+                            appData={appData}
+                            foremanList={foremanList}
+                            appTechnics={appTechnics}
+                            appMaterials={appMaterials}
+                            technics={technics}
+                            technicSheets={technicSheets}
+                            driverSheets={driverSheets}
+                            driverList={driverList}
+                            conflictIdList={conflictIdList}
+                            priorityIdList={priorityIdList}
+                        />
+                    }
+                })
                 }
-            })
-            }
-        </div>
-    );
+            </Masonry>
+        </ResponsiveMasonry>
+    )
 }

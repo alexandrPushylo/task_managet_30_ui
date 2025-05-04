@@ -35,7 +35,7 @@ export interface IMenuItem {
     href: string;
     name: string;
     afterSeparated: boolean;
-    action?: ()=>{}
+    action?: () => {}
 }
 
 export interface IUsers {
@@ -92,9 +92,8 @@ export interface IPosts {
 }
 
 
-
 /////
-export interface applicationData{
+export interface applicationData {
     accept_mode: boolean;
     current_weekday: string;
     next_work_day: string;
@@ -103,4 +102,15 @@ export interface applicationData{
     view_mode: string;
     weekday: string;
     current_user: IUsers;
+}
+
+export const ColumnsCountBreakPoints = {
+    320: 1,
+    640: 2,
+    960: 3,
+    1280: 4,
+    1600: 5,
+    1920: 6,
+    2240: 7,
+    2560: 8
 }
