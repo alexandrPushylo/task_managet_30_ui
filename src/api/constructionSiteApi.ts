@@ -32,7 +32,7 @@ export function useFetchConstructionSites() {
     })
     return {constrSites, isLoading, isError};
 }
-export function useFetchConstructionSiteById(id: string | undefined) {
+export function useFetchConstructionSiteById(id: string | number | undefined) {
     const {data: constrSite, isLoading, isError, isPending} = useQuery({
         queryKey: ['constructionSites', 'constructionSite', 'byId', id],
         queryFn: async (meta) => {

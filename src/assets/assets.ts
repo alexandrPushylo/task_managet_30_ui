@@ -114,3 +114,5 @@ export const ColumnsCountBreakPoints = {
     2240: 7,
     2560: 8
 }
+
+export const msgREJECT = 'ОТКЛОНЕНА\n'
