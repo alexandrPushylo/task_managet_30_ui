@@ -29,7 +29,13 @@ export interface PriorityIdListDto{
 export interface ConflictIdListDto{
     conflict_technic_sheet: number[];
 }
-
+export interface TSWithTechTitle {
+    data: {
+        title: string;
+        technic_sheet_ids: number[];
+        driver_sheet_ids: number[];
+    }[];
+}
 
 //  ============================================================================
 export function useFetchTechnicSheet(current_day?: string) {
@@ -42,6 +48,17 @@ export function useFetchTechnicSheet(current_day?: string) {
         },
     })
     return {technicSheets, isLoading, isError};
+}
+export function useGetTechnicSheetWithTechTitle(current_day?: string) {
+    const url_current_day = current_day?`?current_day=${current_day}`: '';
+    const {data: tSWTechTitle, isLoading, isError} = useQuery({
+        queryKey: ['technicSheets', 'TSWTechTitle', current_day],
+        queryFn: async (meta) => {
+            const response = await instance.get<TSWithTechTitle>(`/api/get_technic_sheet_with_tech_title/${url_current_day}`, {signal: meta.signal});
+            return response.data;
+        },
+    })
+    return {tSWTechTitle, isLoading, isError};
 }
 export function useFetchTechnicSheetById(id: string | undefined) {
     const {data: technicSheet, isLoading, isError, isPending} = useQuery({
