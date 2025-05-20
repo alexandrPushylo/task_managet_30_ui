@@ -1,11 +1,10 @@
-import React, {JSX, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useTextareaAutosize} from "../../../assets/services";
 import {ConstructionSiteDto} from "../../../api/constructionSiteApi";
 import {appDataDto} from "../../../api/applicationApi";
 import {
     useDeleteApplicationsMaterial,
     useFetchApplicationMaterialBy_ATid,
-    useFetchApplicationMaterials,
     useUpdateApplicationsMaterial
 } from "../../../api/applicationMaterialApi";
 import {ApplicationTodayDto} from "../../../api/ApplicationTodayApi";
@@ -16,16 +15,14 @@ import {
 } from "../../../api/applicationTechnicApi";
 import {useAppSelector} from "../../../store/store";
 import {applicationSlice} from "../../../store/slices/applicationSlice";
-import {TechnicsDto, useFetchTechnics, useFetchTechnicTitles} from "../../../api/technicsApi";
+import {useFetchTechnics, useFetchTechnicTitles} from "../../../api/technicsApi";
 import {
     TechnicSheetDto,
-    TSWithTechTitle,
     useFetchTechnicSheet,
     useGetTechnicSheetWithTechTitle
 } from "../../../api/technicSheetApi";
 import {useFetchDriverList} from "../../../api/usersApi";
 import {DriverSheetDto, useFetchDriverSheet} from "../../../api/driverSheetApi";
-import {msgREJECT} from "../../../assets/assets";
 
 export function AppTitle({title}: { title: string }) {
     return <div><h3><u>{title}</u></h3></div>
@@ -159,30 +156,50 @@ function ApplicationTechnicItem({appTechnicItem, technicSheets, driverSheets}: A
     const {technics} = useFetchTechnics();
     const {tSWTechTitle} = useGetTechnicSheetWithTechTitle(currentDay)
 
+    const {setTechnicSheet} = useUpdateApplicationsTechnic(appTechnicItem.id);
 
     const curTechnicSheetItem = technicSheets?.find(item => item.id === appTechnicItem.technic_sheet);
     const curTechnic = technics?.find(item => item.id === curTechnicSheetItem?.technic);
     const curDriverSheetItem = driverSheets?.find(item => item.id === curTechnicSheetItem?.driver_sheet);
 
-    const [techTitle, setTechTitle] = useState(curTechnic?.title);
+    const [techTitle, setTechTitle] = useState<string>();
+
+    useEffect(() => {
+        setTechTitle(curTechnic?.title)
+    }, [curTechnic?.title]);
+
+    const curtSWTechTitleItem = useMemo(() => {
+        return tSWTechTitle?.data.find(items => items.title === techTitle);
+    }, [tSWTechTitle?.data, techTitle]);
+
+    const curDS = useMemo(() => {
+        return driverSheets?.filter(item => curtSWTechTitleItem?.driver_sheet_ids.includes(item.id));
+    }, [curtSWTechTitleItem?.driver_sheet_ids, driverSheets]);
+
+
+    function changeTechTitle(techTitle: string) {
+        setTechTitle(techTitle);
+        const tSWTT = tSWTechTitle?.data.find(items => items.title === techTitle);
+        setTechnicSheet(tSWTT?.technic_sheet_ids[0]);
+
+    }
 
     return <div className="mt-2 card border border-2" style={{boxShadow: '5px 5px 50px'}}>
         <div className="row m-0 p-1 card-header" style={{background: '#e8ebfa'}}>
             {curTechnic && <div className="col">
                 <label className="col-auto p-0">
-                    <SelectTechnicTitle curTechnic={curTechnic}
+                    <SelectTechnicTitle //curTechnic={curTechnic}
                                         appTechnicItem={appTechnicItem}
                                         techTitle={techTitle}
-                                        setTechTitle={setTechTitle}
+                                        changeTechTitle={changeTechTitle}
                     />
                 </label>
                 <label>
                     <SelectTechDriver curDriverSheetItem={curDriverSheetItem}
-                                      tSWTechTitle={tSWTechTitle}
                                       appTechnicItem={appTechnicItem}
-                                      techTitle={techTitle}
-                                      driverSheets={driverSheets}
                                       technicSheets={technicSheets}
+                                      curDS={curDS}
+                                      setTechnicSheet={setTechnicSheet}
                     />
                 </label>
             </div>}
@@ -195,23 +212,21 @@ function ApplicationTechnicItem({appTechnicItem, technicSheets, driverSheets}: A
 
 interface SelectTechnicTitleProps {
     techTitle?: string
-    setTechTitle: React.Dispatch<React.SetStateAction<string | undefined>>;
-    curTechnic?: TechnicsDto;
+    changeTechTitle: (techTitle: string) => void;
     appTechnicItem: ApplicationTechnicDto;
 }
 
-function SelectTechnicTitle({curTechnic, appTechnicItem, techTitle, setTechTitle}: SelectTechnicTitleProps) {
+function SelectTechnicTitle({appTechnicItem, techTitle, changeTechTitle}: SelectTechnicTitleProps) {
     const currentDay = useAppSelector(applicationSlice.selectors.selectCurrentDay);
     const {technicTitles} = useFetchTechnicTitles(currentDay);
 
     return <select
         className="form-control p-1"
         disabled={appTechnicItem.isChecked || appTechnicItem.is_cancelled}
-        // defaultValue={curTechnic?.title}
+        defaultValue={techTitle}
         onChange={(e) => {
-            setTechTitle(e.target.value)
+            changeTechTitle(e.target.value)
         }}
-
     >
         {technicTitles?.technic_title.map((item, index) => {
             return <option key={index}
@@ -223,41 +238,39 @@ function SelectTechnicTitle({curTechnic, appTechnicItem, techTitle, setTechTitle
 }
 
 interface SelectTechDriverProps {
-    techTitle?: string
     curDriverSheetItem?: DriverSheetDto;
-    tSWTechTitle?: TSWithTechTitle;
     appTechnicItem: ApplicationTechnicDto;
-    driverSheets?: DriverSheetDto[];
     technicSheets?: TechnicSheetDto[];
+    curDS?:DriverSheetDto[];
+    setTechnicSheet:(technicSheetId: number | undefined) => void
 }
 
 function SelectTechDriver({
                               curDriverSheetItem,
-                              tSWTechTitle,
                               appTechnicItem,
-                              techTitle,
-                              driverSheets,
-                              technicSheets
+                              technicSheets,
+                              curDS,
+                              setTechnicSheet
                           }: SelectTechDriverProps) {
     const {driverList} = useFetchDriverList();
-    const curtSWTechTitleItem = useMemo(() => {
-        return tSWTechTitle?.data.find(items => items.title === techTitle);
-    }, [tSWTechTitle?.data, techTitle]);
-    const curDS = driverSheets?.filter(item => curtSWTechTitleItem?.driver_sheet_ids.includes(item.id));
-
-    const {setTechnicSheet} = useUpdateApplicationsTechnic(appTechnicItem.id);
+    const [curTSId, setCurTSId] = useState<number>()
 
     function updateTechnicSheet(driverSheetId: number) {
         const curTS = technicSheets?.find(item => item.driver_sheet === driverSheetId);
         setTechnicSheet(curTS?.id);
     }
 
+    useEffect(() => {
+        setCurTSId(curDriverSheetItem?.driver)
+    }, [curDriverSheetItem?.driver]);
+    
     return <select
         className="form-control p-1"
         disabled={appTechnicItem.isChecked || appTechnicItem.is_cancelled}
-        defaultValue={curDriverSheetItem?.driver}
+        defaultValue={curTSId}
         onChange={(e) => {
-            updateTechnicSheet(parseInt(e.target.value))
+            setCurTSId(curDriverSheetItem?.driver);
+            updateTechnicSheet(parseInt(e.target.value));
         }}
     >{curDS?.map((driverSheet, index) => {
         const curDriver = driverList?.find(item => item.id === driverSheet.driver)
@@ -326,8 +339,12 @@ interface DescriptionAppTechnicProps {
 function DescriptionAppTechnic({appTechnicItem}: DescriptionAppTechnicProps) {
     const {setDescription: updateDesc} = useUpdateApplicationsTechnic(appTechnicItem.id);
     useTextareaAutosize();
-    const [description, setDescription] = useState(appTechnicItem.description)
+    const [description, setDescription] = useState<string>()
     const borderStyle = appTechnicItem.isChecked ? " border border-1 border-success " : appTechnicItem.is_cancelled ? " border border-1 border-danger " : ""
+
+    useEffect(() => {
+        setDescription(appTechnicItem.description)
+    }, [appTechnicItem.description]);
 
     return <div className="row">
         <label><textarea className={"form-control " + borderStyle}
@@ -358,6 +375,10 @@ export function ApplicationMaterials({appToday}: ApplicationMaterialsProps) {
     const {setDescription: updateDescription} = useUpdateApplicationsMaterial(appMaterial?.id);
     const {deleteAppMaterial} = useDeleteApplicationsMaterial(appMaterial?.id)
 
+    useEffect(() => {
+        setDescription(appMaterial?.description)
+    }, [appMaterial?.description]);
+
     useTextareaAutosize();
 
     function resetChangeDescription() {
@@ -374,9 +395,7 @@ export function ApplicationMaterials({appToday}: ApplicationMaterialsProps) {
         if (description){
             updateDescription(description);
         }
-
     }
-
 
     if (appMaterial) {
         return <div className="card shadow-lg mt-4">
