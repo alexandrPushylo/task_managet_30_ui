@@ -11,7 +11,7 @@ import {ConflictIdListDto, PriorityIdListDto, TechnicSheetDto} from "../../../ap
 import {DriverSheetDto} from "../../../api/driverSheetApi";
 import {ApplicationMaterialDto} from "../../../api/applicationMaterialApi";
 import {useTextareaAutosize} from "../../../assets/services";
-import {href} from "react-router";
+import {useNavigate} from "react-router";
 
 
 function getBorderStyle(appStatus?: AppTodayStatus) {
@@ -211,6 +211,7 @@ export default function ConstrSiteItem(
                     <CardFooter
                         appToday={appToday}
                         constrSiteItem={constrSiteItem}
+                        appData={appData}
                     />
                 }
 
@@ -341,9 +342,10 @@ function AppMaterial({appMaterial, fontSize}: AppMaterialProps) {
 
 interface CardFooterProps {
     appToday?: ApplicationTodayDto;
+    appData?: appDataDto;
     constrSiteItem?: ConstructionSiteDto;
 }
-function CardFooter({appToday, constrSiteItem}: CardFooterProps) {
+function CardFooter({appToday, appData, constrSiteItem}: CardFooterProps) {
     return <div
     >
         <hr className="m-0 p-0"/>
@@ -360,7 +362,7 @@ function CardFooter({appToday, constrSiteItem}: CardFooterProps) {
                     {appToday.status === 'submitted' && <BtnApprove appTodayId={appToday.id}/>}
                     {appToday.status === 'approved' && <BtnSend appTodayId={appToday.id}/>}
                 </div>:
-                    <div className="row m-0 p-0"><BtnCreate constrSiteId={constrSiteItem?.id}/></div>
+                    <div className="row m-0 p-0"><BtnCreate constrSiteId={constrSiteItem?.id} appData={appData}/></div>
 
                 }
 
@@ -371,30 +373,36 @@ function CardFooter({appToday, constrSiteItem}: CardFooterProps) {
 
 interface BtnProps {
     appTodayId?: number;
+    appData?: appDataDto;
     constrSiteId?: number;
 }
 function BtnDelete({appTodayId}: BtnProps) {
+    const navigate = useNavigate();
     return <button
         type="button"
         className="btn btn-outline-danger mx-1"
         onClick={() => alert(`delete ${appTodayId}`)}
     ><i className="fa-solid fa-trash"></i></button>
 }
-function BtnEdit({appTodayId}: BtnProps) {
+function BtnEdit({appTodayId,constrSiteId}: BtnProps) {
+    const navigate = useNavigate();
     return <button
         type="button"
         className="btn btn-outline-primary px-5 mx-1"
-        onClick={() => alert(`edit ${appTodayId}`)}
+        // onClick={() => alert(`edit ${appTodayId}`)}
+        onClick={()=>navigate(`/create_app/${constrSiteId}`)}
     ><i className="fa-regular fa-pen-to-square"></i></button>
 }
-function BtnCreate({constrSiteId}: BtnProps) {
+function BtnCreate({constrSiteId, appData}: BtnProps) {
+    const navigate = useNavigate();
     return <button
         type="button"
         className="btn btn-outline-primary"
-        onClick={() => alert(`create ${constrSiteId}`)}
+        onClick={()=>navigate(`/create_app/${constrSiteId}`)}
     ><i className="fa-solid fa-plus"></i></button>
 }
 function BtnApprove({appTodayId}: BtnProps) {
+    const navigate = useNavigate();
     return <button
         type="button"
         className="btn btn-outline-success px-5 mx-1"
@@ -402,6 +410,7 @@ function BtnApprove({appTodayId}: BtnProps) {
     ><i className="fa-solid fa-check"></i></button>
 }
 function BtnSend({appTodayId}: BtnProps) {
+    const navigate = useNavigate();
     return <button
         type="button"
         className="btn btn-outline-info px-5 mx-1"
