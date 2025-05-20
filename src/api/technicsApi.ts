@@ -17,6 +17,9 @@ export interface TechnicsDto{
 interface technicTypeDto{
     technic_types: []
 }
+interface technicTitleDto{
+    technic_title: []
+}
 
 export interface ITechnicData{
     id?: string;
@@ -39,6 +42,17 @@ export function useFetchTechnicTypes() {
         },
     })
     return {technicTypes, isLoading, isError};
+}
+export function useFetchTechnicTitles(current_day?: string) {
+    const url_current_day = current_day?`?current_day=${current_day}`: '';
+    const {data: technicTitles, isLoading, isError} = useQuery({
+        queryKey: ['technics', 'technicTitles'],
+        queryFn: async (meta) => {
+            const response = await instance.get<technicTitleDto>(`/api/get_technic_title/${url_current_day}`, {signal: meta.signal});
+            return response.data;
+        },
+    })
+    return {technicTitles, isLoading, isError};
 }
 
 export function useFetchTechnics() {
