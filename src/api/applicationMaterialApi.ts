@@ -31,11 +31,11 @@ export function useFetchApplicationMaterials(current_day?: string) {
     });
     return {appMaterials, isLoading, isError, isPending};
 }
-export function useFetchApplicationMaterialBy_ATid(appTodayId: string | undefined) {
+export function useFetchApplicationMaterialBy_ATid(appTodayId: string | number | undefined) {
     const {data: appMaterial, isLoading, isPending, isError} = useQuery({
         queryKey: ['applicationMaterials', 'applicationMaterial', 'appTodayId', appTodayId],
         queryFn: async (meta) => {
-            const response = await instance.get(`/api/application_material/by_application_today/${appTodayId}/`, {signal: meta.signal});
+            const response = await instance.get<IApplicationMaterial[]>(`/api/application_material/by_application_today/${appTodayId}/`, {signal: meta.signal});
             return response.data;
         },
         enabled: !!appTodayId,
@@ -53,6 +53,29 @@ export function useFetchApplicationMaterialById(id: string | undefined) {
     });
     return {appMaterial, isLoading, isError, isPending};
 }
+
+export function useDeleteApplicationsMaterial(id: number | string | undefined) {
+    const queryClient = useQueryClient();
+
+    const  deleteApplicationsMaterialMutation = useMutation({
+        mutationFn: async (meta: any) => {
+            const response = await instance.delete(`/api/application_material/${id}/`, {signal: meta.signal});
+            return response.data;
+        },
+
+        async onSettled(){
+            await queryClient.invalidateQueries({
+                queryKey: ['applicationMaterials'],
+            })
+
+        }
+    });
+
+    return {
+        deleteAppMaterial: deleteApplicationsMaterialMutation.mutate
+    };
+}
+
 export function useUpdateApplicationsMaterial(id: number | string | undefined) {
     const queryClient = useQueryClient();
 
@@ -82,19 +105,16 @@ export function useUpdateApplicationsMaterial(id: number | string | undefined) {
         }
     });
 
-    const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        updateApplicationsMaterialMutation.mutate({data:formData});
-    };
-    // const setPriority = (priority?: number) => {
-    //     const data = {priority: priority ?? 1}
-    //     updateApplicationsMaterialMutation.mutate({data:data});
-    // }
+    const handleUpdate = (data: IApplicationMaterial) => {
+        updateApplicationsMaterialMutation.mutate({data});
+    }
     const setDescription = (description: string | undefined) => {
-        const data = {description: description ? description : null}
+        const data = {description: description ? description : ''}
         updateApplicationsMaterialMutation.mutate({data:data});
     }
 
-    return {handleUpdate, setDescription, isPending: updateApplicationsMaterialMutation.isPending};
+    return {
+        handleUpdate,
+        setDescription
+    };
 }
