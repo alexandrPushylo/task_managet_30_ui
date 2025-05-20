@@ -71,7 +71,7 @@ interface GetOrCreateAppToday {
     workday_id: string | number | undefined;
 }
 export function useGetOrCreateApplicationsTodayByCW({construction_site_id, workday_id}:GetOrCreateAppToday) {
-    const status = !!(construction_site_id && workday_id);
+    const status = (!!construction_site_id && !!workday_id);
     const url = status ? `?construction_site_id=${construction_site_id}&workday_id=${workday_id}` : '';
     const {data: appToday, isLoading, isError, isPending} = useQuery({
         queryKey: ['applicationsToday', 'applicationToday', 'GetOrCreate', construction_site_id, workday_id],
