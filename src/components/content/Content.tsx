@@ -48,7 +48,7 @@ function Content() {
                 <Route path="/driver_sheet" element={defComponent(<DriverSheet/>)}/>
                 <Route path="/technic_sheet" element={defComponent(<TechnicSheet/>)}/>
 
-                {/*<Route path="/edit_app/:appTodayId" element={defComponent(<TechnicSheet/>)}/>*/}
+                <Route path="/edit_app/:appTodayId" element={defComponent(<CreateApp/>)}/>
                 <Route path="/create_app/:constrSiteId" element={defComponent(<CreateApp/>)}/>
 
                 <Route path="/logout" element={<Logout/>}/>

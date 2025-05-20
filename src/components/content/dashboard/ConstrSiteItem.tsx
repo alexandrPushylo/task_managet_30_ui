@@ -384,13 +384,12 @@ function BtnDelete({appTodayId}: BtnProps) {
         onClick={() => alert(`delete ${appTodayId}`)}
     ><i className="fa-solid fa-trash"></i></button>
 }
-function BtnEdit({appTodayId,constrSiteId}: BtnProps) {
+function BtnEdit({appTodayId, constrSiteId}: BtnProps) {
     const navigate = useNavigate();
     return <button
         type="button"
         className="btn btn-outline-primary px-5 mx-1"
-        // onClick={() => alert(`edit ${appTodayId}`)}
-        onClick={()=>navigate(`/create_app/${constrSiteId}`)}
+        onClick={()=>navigate(`/edit_app/${appTodayId}`)}
     ><i className="fa-regular fa-pen-to-square"></i></button>
 }
 function BtnCreate({constrSiteId, appData}: BtnProps) {
