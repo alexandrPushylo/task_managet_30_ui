@@ -17,6 +17,7 @@ interface IToday{
     status: boolean;
 }
 export interface ICurrentDate{
+    id: number;
     date: string;
     weekday: string;
     day: number;
@@ -126,7 +127,7 @@ export function useCurrentUser() {
     const {data: currentUser, isLoading, isError, refetch} = useQuery({
         queryKey: ['currentUser'],
         queryFn: async (meta) => {
-            const response = await instance.get<currentUserDto>('api/get_current_user', {signal: meta.signal});
+            const response = await instance.get<currentUserDto>('api/get_current_user/', {signal: meta.signal});
             return response.data;
         },
 
