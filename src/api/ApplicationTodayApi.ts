@@ -2,6 +2,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {instance} from "./api";
 import {useNavigate} from "react-router";
 import {AppTodayStatus} from "../assets/assets";
+import {IUserData} from "./usersApi";
 
 
 export interface ApplicationTodayDto {
@@ -14,7 +15,7 @@ export interface ApplicationTodayDto {
 }
 export interface IApplicationToday {
     id?: string;
-    construction_site: string;
+    construction_site: number;
     status?: AppTodayStatus;
     description?: string;
     date: number;
@@ -64,6 +65,49 @@ export function useFetchApplicationsTodayById(id: string | undefined) {
     })
     return {appToday, isLoading, isError, isPending};
 }
+
+interface GetOrCreateAppToday {
+    construction_site_id: string | number | undefined;
+    workday_id: string | number | undefined;
+}
+export function useGetOrCreateApplicationsTodayByCW({construction_site_id, workday_id}:GetOrCreateAppToday) {
+    const status = !!(construction_site_id && workday_id);
+    const url = status ? `?construction_site_id=${construction_site_id}&workday_id=${workday_id}` : '';
+    const {data: appToday, isLoading, isError, isPending} = useQuery({
+        queryKey: ['applicationsToday', 'applicationToday', 'GetOrCreate', construction_site_id, workday_id],
+        queryFn: async (meta) => {
+            const response = await instance.get<ApplicationTodayDto>(`/api/application_today/get_or_create/${url}`, {signal: meta.signal});
+            return response.data;
+        },
+        enabled: status,
+    })
+    return {appToday, isLoading, isError, isPending};
+}
+
+export function useCreateApplicationsToday(){
+    const queryClient = useQueryClient();
+
+    const  createApplicationsTodayMutation = useMutation({
+        mutationFn: async (meta: any) => {
+            const response = await instance.post<IApplicationToday>('/api/applications_today/', meta.data, {signal: meta.signal});
+            return response.data;
+        },
+        async onSettled(){
+            await queryClient.invalidateQueries({
+                queryKey: ['applicationsToday'],
+            })
+        }
+    });
+    const handleCreate = (data: IApplicationToday) => {
+        createApplicationsTodayMutation.mutate({data:data});
+    }
+    return {
+        handleCreate,
+        isPending: createApplicationsTodayMutation.isPending,
+        data: createApplicationsTodayMutation.data
+    };
+}
+
 export function useUpdateApplicationsToday(id: number | string | undefined) {
     const queryClient = useQueryClient();
 
