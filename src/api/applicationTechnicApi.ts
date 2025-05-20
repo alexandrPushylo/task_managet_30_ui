@@ -1,5 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {instance} from "./api";
+import {msgREJECT} from "../assets/assets";
+import {useNavigate} from "react-router";
 
 
 export interface ApplicationTechnicDto {
@@ -35,11 +37,11 @@ export function useFetchApplicationTechnics(current_day?: string) {
     });
     return {appTechnics, isLoading, isError, isPending};
 }
-export function useFetchApplicationTechnicBy_ATid(appTodayId: string | undefined) {
+export function useFetchApplicationTechnicBy_ATid(appTodayId: string | number | undefined) {
     const {data: appTechnic, isLoading, isPending, isError} = useQuery({
         queryKey: ['applicationTechnics', 'applicationTechnic', 'appTodayId', appTodayId],
         queryFn: async (meta) => {
-            const response = await instance.get(`/api/application_technic/by_application_today/${appTodayId}/`, {signal: meta.signal});
+            const response = await instance.get<ApplicationTechnicDto[]>(`/api/application_technic/by_application_today/${appTodayId}/`, {signal: meta.signal});
             return response.data;
         },
         enabled: !!appTodayId,
@@ -56,6 +58,28 @@ export function useFetchApplicationTechnicById(id: string | undefined) {
         enabled: !!id,
     });
     return {appTechnic, isLoading, isError, isPending};
+}
+
+export function useDeleteApplicationsTechnic(id: number | string | undefined) {
+    const queryClient = useQueryClient();
+
+    const  deleteApplicationsTechnicMutation = useMutation({
+        mutationFn: async (meta: any) => {
+            const response = await instance.delete(`/api/application_technic/${id}/`, {signal: meta.signal});
+            return response.data;
+        },
+
+        async onSettled(){
+            await queryClient.invalidateQueries({
+                queryKey: ['applicationTechnics'],
+            })
+
+        }
+    });
+
+    return {
+        handleDelete: deleteApplicationsTechnicMutation.mutate
+    };
 }
 export function useUpdateApplicationsTechnic(id: number | string | undefined) {
     const queryClient = useQueryClient();
@@ -86,10 +110,8 @@ export function useUpdateApplicationsTechnic(id: number | string | undefined) {
         }
     });
 
-    const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        updateApplicationsTechnicMutation.mutate({data:formData});
+    const handleUpdate = (data: IApplicationTechnic) => {
+        updateApplicationsTechnicMutation.mutate({data});
     };
     const setPriority = (priority?: number) => {
         const data = {priority: priority ?? 1}
@@ -99,6 +121,33 @@ export function useUpdateApplicationsTechnic(id: number | string | undefined) {
         const data = {description: description ? description : null}
         updateApplicationsTechnicMutation.mutate({data:data});
     }
+    const setTechnicSheet = (technicSheetId: number | undefined) => {
+        const data: IApplicationTechnic = {technic_sheet: technicSheetId};
+        updateApplicationsTechnicMutation.mutate({data:data});
+    }
+    const acceptApp = (description: string | undefined) => {
+        const data: IApplicationTechnic = {
+            isChecked: false,
+            is_cancelled: false,
+            description: description?.replace(msgREJECT,"")
+        }
+        updateApplicationsTechnicMutation.mutate({data:data});
+    }
+    const rejectApp = (description: string | undefined) => {
+        const data: IApplicationTechnic = {
+            isChecked: false,
+            is_cancelled: true,
+            description: msgREJECT + description
+        }
+        updateApplicationsTechnicMutation.mutate({data:data});
+    }
 
-    return {handleUpdate, setPriority, setDescription, isPending: updateApplicationsTechnicMutation.isPending};
+    return {
+        handleUpdate,
+        setPriority,
+        setDescription,
+        setTechnicSheet,
+        acceptApp,
+        rejectApp,
+        isPending: updateApplicationsTechnicMutation.isPending};
 }
