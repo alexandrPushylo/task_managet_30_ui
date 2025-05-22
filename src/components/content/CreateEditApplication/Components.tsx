@@ -274,10 +274,13 @@ function SelectTechDriver({
         }}
     >{curDS?.map((driverSheet, index) => {
         const curDriver = driverList?.find(item => item.id === driverSheet.driver)
+        const curTS = technicSheets?.find(item => item.driver_sheet === driverSheet.id);
+
         return <option key={index}
                        value={driverSheet.id}
                        selected={driverSheet.id === curDriverSheetItem?.id}
-        >{curDriver?.last_name}</option>
+                       style={(curTS && curTS.count_application===0) ? !driverSheet?.status ? {color:'black'}: {color:'green'} :{color:'red'}}
+        >{driverSheet?.status ? curDriver?.last_name : 'Не назначен'} {(curTS && curTS.count_application>0) && '(Занят)'}</option>
     })}</select>
 }
 
@@ -299,7 +302,7 @@ function ButtonsControlEdit({appTechnicItem}: ButtonsControlEditProps) {
             ><i className="fa-solid fa-ellipsis"></i></button>
             <ul className="dropdown-menu dropdown-menu-end">
 
-                {(appTechnicItem.is_cancelled || appTechnicItem.isChecked) && <li>
+                {(appTechnicItem.is_cancelled && !appTechnicItem.isChecked) && <li>
                     <button className="dropdown-item fw-bolder text-success"
                             type="button"
                             onClick={() => acceptApp(appTechnicItem.description)}
@@ -307,7 +310,7 @@ function ButtonsControlEdit({appTechnicItem}: ButtonsControlEditProps) {
                     </button>
                 </li>}
 
-                {!appTechnicItem.is_cancelled && <li>
+                {(!appTechnicItem.is_cancelled) && <li>
                     <button className="dropdown-item fw-bolder text-primary"
                             type="button"
                             onClick={() => rejectApp(appTechnicItem.description)}
