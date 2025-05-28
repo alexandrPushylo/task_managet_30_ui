@@ -151,3 +151,30 @@ export function useUpdateApplicationsTechnic(id: number | string | undefined) {
         rejectApp,
         isPending: updateApplicationsTechnicMutation.isPending};
 }
+
+export function useCreateApplicationsTechnic(){
+    const queryClient = useQueryClient();
+
+    const  createApplicationsTechnicMutation = useMutation({
+        mutationFn: async (meta: any) => {
+            const response = await instance.post<IApplicationTechnic>('/api/applications_technic/', meta.data, {signal: meta.signal});
+            return response.data;
+        },
+        async onSettled(){
+            await queryClient.invalidateQueries({
+                queryKey: ['applicationTechnics'],
+            });
+            await queryClient.invalidateQueries({
+                queryKey: ['technicSheets'],
+            });
+            await queryClient.invalidateQueries({
+                queryKey: ['driverSheets'],
+            });
+        }
+    });
+
+    const handleCreate = (data: IApplicationTechnic) => {
+        createApplicationsTechnicMutation.mutate({data: data});
+    }
+    return {handleCreate, isPending: createApplicationsTechnicMutation.isPending};
+}
