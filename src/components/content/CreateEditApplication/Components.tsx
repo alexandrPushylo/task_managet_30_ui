@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {JSX, useEffect, useMemo, useState} from 'react';
 import {useTextareaAutosize} from "../../../assets/services";
 import {ConstructionSiteDto} from "../../../api/constructionSiteApi";
 import {appDataDto} from "../../../api/applicationApi";
@@ -15,14 +15,16 @@ import {
 } from "../../../api/applicationTechnicApi";
 import {useAppSelector} from "../../../store/store";
 import {applicationSlice} from "../../../store/slices/applicationSlice";
-import {useFetchTechnics, useFetchTechnicTitles} from "../../../api/technicsApi";
+import {useFetchTechnics} from "../../../api/technicsApi";
 import {
     TechnicSheetDto,
     useFetchTechnicSheet,
-    useGetTechnicSheetWithTechTitle
+    useGetTechnicSheetWithTechTitle, useGetTechnicSheetWithTechTitleForAdd
 } from "../../../api/technicSheetApi";
 import {useFetchDriverList} from "../../../api/usersApi";
 import {DriverSheetDto, useFetchDriverSheet} from "../../../api/driverSheetApi";
+import {IDisplayComponent} from "./CreateApp";
+import {ModalEditAppTechnic} from "./ModalEditAppTechnic";
 
 export function AppTitle({title}: { title: string }) {
     return <div><h3><u>{title}</u></h3></div>
@@ -218,7 +220,7 @@ interface SelectTechnicTitleProps {
 
 function SelectTechnicTitle({appTechnicItem, techTitle, changeTechTitle}: SelectTechnicTitleProps) {
     const currentDay = useAppSelector(applicationSlice.selectors.selectCurrentDay);
-    const {technicTitles} = useFetchTechnicTitles(currentDay);
+    const {tSWTechTitle} = useGetTechnicSheetWithTechTitle(currentDay);
 
     return <select
         className="form-control p-1"
@@ -228,11 +230,11 @@ function SelectTechnicTitle({appTechnicItem, techTitle, changeTechTitle}: Select
             changeTechTitle(e.target.value)
         }}
     >
-        {technicTitles?.technic_title.map((item, index) => {
+        {tSWTechTitle?.data?.map((item, index) => {
             return <option key={index}
-                           value={item}
-                           selected={item === techTitle}
-            >{item}</option>;
+                           value={item.title}
+                           selected={item.title === techTitle}
+            >{item.title}</option>;
         })}
     </select>
 }
@@ -263,11 +265,12 @@ function SelectTechDriver({
     useEffect(() => {
         setCurTSId(curDriverSheetItem?.driver)
     }, [curDriverSheetItem?.driver]);
-    
-    return <select
+
+    if (curTSId){
+        return <select
         className="form-control p-1"
         disabled={appTechnicItem.isChecked || appTechnicItem.is_cancelled}
-        defaultValue={curTSId}
+        // defaultValue={curTSId}
         onChange={(e) => {
             setCurTSId(curDriverSheetItem?.driver);
             updateTechnicSheet(parseInt(e.target.value));
@@ -280,8 +283,13 @@ function SelectTechDriver({
                        value={driverSheet.id}
                        selected={driverSheet.id === curDriverSheetItem?.id}
                        style={(curTS && curTS.count_application===0) ? !driverSheet?.status ? {color:'black'}: {color:'green'} :{color:'red'}}
-        >{driverSheet?.status ? curDriver?.last_name : 'Не назначен'} {(curTS && curTS.count_application>0) && '(Занят)'}</option>
-    })}</select>
+        >{driverSheet?.status ? curDriver?.last_name : 'Не назначен'} {(driverSheet?.status && curTS && curTS.count_application>0) && '(Занят)'}</option>
+    })}
+        </select>
+    } else {
+        return <></>
+    }
+
 }
 
 interface ButtonsControlEditProps {
@@ -305,7 +313,7 @@ function ButtonsControlEdit({appTechnicItem}: ButtonsControlEditProps) {
                 {(appTechnicItem.is_cancelled && !appTechnicItem.isChecked) && <li>
                     <button className="dropdown-item fw-bolder text-success"
                             type="button"
-                            onClick={() => acceptApp(appTechnicItem.description)}
+                            onClick={() => acceptApp(appTechnicItem.description, appTechnicItem?.technic_sheet)}
                     >Принять заявку
                     </button>
                 </li>}
@@ -313,7 +321,7 @@ function ButtonsControlEdit({appTechnicItem}: ButtonsControlEditProps) {
                 {(!appTechnicItem.is_cancelled) && <li>
                     <button className="dropdown-item fw-bolder text-primary"
                             type="button"
-                            onClick={() => rejectApp(appTechnicItem.description)}
+                            onClick={() => rejectApp(appTechnicItem.description, appTechnicItem?.technic_sheet)}
                     >Отменить заявку
                     </button>
                 </li>}
@@ -342,11 +350,11 @@ interface DescriptionAppTechnicProps {
 function DescriptionAppTechnic({appTechnicItem}: DescriptionAppTechnicProps) {
     const {setDescription: updateDesc} = useUpdateApplicationsTechnic(appTechnicItem.id);
     useTextareaAutosize();
-    const [description, setDescription] = useState<string>()
+    const [description, setDescription] = useState<string>('')
     const borderStyle = appTechnicItem.isChecked ? " border border-1 border-success " : appTechnicItem.is_cancelled ? " border border-1 border-danger " : ""
 
     useEffect(() => {
-        setDescription(appTechnicItem.description)
+        setDescription(appTechnicItem.description ?? '')
     }, [appTechnicItem.description]);
 
     return <div className="row">
@@ -365,10 +373,14 @@ function DescriptionAppTechnic({appTechnicItem}: DescriptionAppTechnicProps) {
 //  ============================================================================
 //  ============================================================================
 interface ApplicationMaterialsProps {
-    appToday?: ApplicationTodayDto
+    appToday?: ApplicationTodayDto;
+    displayAM: boolean;
+    setDisplayAM: (status:boolean)=>void
+    setDisplayBAT: (status:boolean)=>void
+    setDisplayBAM: (status:boolean)=>void
 }
 
-export function ApplicationMaterials({appToday}: ApplicationMaterialsProps) {
+export function ApplicationMaterials({appToday, displayAM, setDisplayAM, setDisplayBAT, setDisplayBAM}: ApplicationMaterialsProps) {
     const {appMaterial: appMaterialRaw} = useFetchApplicationMaterialBy_ATid(appToday?.id);
     const appMaterial = (appMaterialRaw && appMaterialRaw.length > 0) ? appMaterialRaw[0] : undefined;
     const isChangeableMaterial = true;
@@ -392,6 +404,11 @@ export function ApplicationMaterials({appToday}: ApplicationMaterialsProps) {
         if (description === appMaterial?.description){
             toggleButton(false);
         }
+        if (!description) {
+            setDisplayAM(false)
+        }
+        setDisplayBAT(true)
+        setDisplayBAM(true)
     }
     function saveDescription() {
         toggleButton(false);
@@ -400,8 +417,18 @@ export function ApplicationMaterials({appToday}: ApplicationMaterialsProps) {
         }
     }
 
-    if (appMaterial) {
-        return <div className="card shadow-lg mt-4">
+    const showAMStatus = !!(appMaterial || displayAM)
+    const showAM = showAMStatus ? {display: 'block'} : {display: 'none'};
+
+    useEffect(() => {
+        const textareaAppMaterial = document.getElementById("textarea_app_material");
+        (showAMStatus && textareaAppMaterial) && textareaAppMaterial.focus();
+    }, [showAMStatus]);
+
+    return <div className="card shadow-lg mt-4"
+                style={showAM}
+                // style={{display: 'block'}}
+        >
             {!isChangeableMaterial &&
                 <span style={{textAlign: 'center', backgroundColor: "rgba(233,236,132,0.47)"}}>Прием заявок на материалы приостановлен</span>}
 
@@ -410,6 +437,7 @@ export function ApplicationMaterials({appToday}: ApplicationMaterialsProps) {
             </div>
             <div className="card-body p-0">
                 <textarea className="form-control"
+                          id="textarea_app_material"
                           readOnly={!isChangeableMaterial}
                           disabled={!isChangeableMaterial}
                           value={description}
@@ -441,10 +469,53 @@ export function ApplicationMaterials({appToday}: ApplicationMaterialsProps) {
             }
         </div>
 
-    } else {
-        return <></>
+
+
+
+}
+
+//  ============================================================================
+interface ButtonAddAppProps {
+    isChangeableMaterial: boolean;
+    displayBAT: boolean;
+    displayBAM: boolean;
+    setDisplayAM: (status:boolean)=>void
+    setDisplayBAT: (status:boolean)=>void
+    setDisplayBAM: (status:boolean)=>void
+    appToday?: ApplicationTodayDto;
+}
+export function ButtonAddApp({isChangeableMaterial, displayBAT, displayBAM, setDisplayAM, setDisplayBAT, setDisplayBAM, appToday}: ButtonAddAppProps): JSX.Element {
+    function addAppMater() {
+        setDisplayAM(true);
+        const textareaAppMaterial = document.getElementById("textarea_app_material");
+        textareaAppMaterial && textareaAppMaterial.focus();
+        setDisplayBAT(false);
+        setDisplayBAM(false);
     }
 
+    return <div>
+        <div
+        className="container position-fixed translate-middle-x bottom-0 start-50"
+        style={{marginBottom: '4rem', width:'max-content'}}
+    >
+        <div className="btn-group" style={{boxShadow: '2px 2px 10px 2px'}}>
+            {displayBAT && <button type="button"
+                     className="btn btn-primary"
+                     data-bs-toggle="modal"
+                     data-bs-target="#modalApplicationTechnic"
+            ><span className="fw-bolder"><i className="fa-solid fa-plus"></i> ТЕХНИКА</span></button>}
+            {(isChangeableMaterial && displayBAM) &&
+                <button type="button"
+                     className="btn btn-primary"
+                        onClick={addAppMater}
+            ><span className="fw-bolder"><i className="fa-solid fa-plus"></i> МАТЕРИАЛЫ</span></button>}
+        </div>
+
+
+
+        </div>
+        <ModalEditAppTechnic appToday={appToday} />
+        </div>
 
 }
 

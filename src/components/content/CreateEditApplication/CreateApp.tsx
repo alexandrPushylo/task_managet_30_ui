@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import style from './CEApplication.module.css';
 import {
     AppTitle,
     CardTitle,
     AppTodayDescription,
-    ApplicationTechnics, ApplicationMaterials,
+    ApplicationTechnics,
+    ApplicationMaterials,
+    ButtonAddApp
 
 } from './Components';
 import {useParams} from "react-router";
@@ -14,9 +16,23 @@ import {applicationSlice} from "../../../store/slices/applicationSlice";
 import {useAppData} from "../../../api/applicationApi";
 import {useFetchApplicationsTodayById, useGetOrCreateApplicationsTodayByCW} from "../../../api/ApplicationTodayApi";
 
+
+export interface IDisplayComponent {
+    appTech?: boolean;
+    appMat?: boolean;
+    btnAddTech?: boolean;
+    btnAddMat?: boolean;
+}
+
 export default function CreateApp() {
     const {constrSiteId} = useParams<{ constrSiteId: string }>()
     const {appTodayId} = useParams<{ appTodayId: string }>()
+
+    const [displayAT, setDisplayAT] = useState(true);
+    const [displayAM, setDisplayAM] = useState(false);
+    const [displayBAT, setDisplayBAT] = useState(true);
+    const [displayBAM, setDisplayBAM] = useState(true);
+
     const currentDay = useAppSelector(applicationSlice.selectors.selectCurrentDay);
     const {appData} = useAppData({current_day: currentDay});
 
@@ -40,10 +56,22 @@ export default function CreateApp() {
                 <AppTodayDescription/>
             </div>
 
-            <ApplicationTechnics appToday={appToday}/>
-            <ApplicationMaterials appToday={appToday}/>
+            {displayAT && <ApplicationTechnics appToday={appToday}/>}
+            <ApplicationMaterials appToday={appToday}
+                                  displayAM={displayAM}
+                                  setDisplayAM={setDisplayAM}
+                                  setDisplayBAT={setDisplayBAT}
+                                  setDisplayBAM={setDisplayBAM}
+            />
 
-
+            <ButtonAddApp isChangeableMaterial={true}
+                          displayBAT={displayBAT}
+                          displayBAM={displayBAM}
+                          setDisplayAM={setDisplayAM}
+                          setDisplayBAT={setDisplayBAT}
+                          setDisplayBAM={setDisplayBAM}
+                          appToday={appToday}
+            />
         </div>
     );
 }
