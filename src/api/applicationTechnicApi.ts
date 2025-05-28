@@ -2,6 +2,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {instance} from "./api";
 import {msgREJECT} from "../assets/assets";
 import {useNavigate} from "react-router";
+import {IUserData} from "./usersApi";
 
 
 export interface ApplicationTechnicDto {
@@ -72,8 +73,13 @@ export function useDeleteApplicationsTechnic(id: number | string | undefined) {
         async onSettled(){
             await queryClient.invalidateQueries({
                 queryKey: ['applicationTechnics'],
-            })
-
+            });
+            await queryClient.invalidateQueries({
+                queryKey: ['technicSheets'],
+            });
+            await queryClient.invalidateQueries({
+                queryKey: ['driverSheets'],
+            });
         }
     });
 
@@ -106,7 +112,10 @@ export function useUpdateApplicationsTechnic(id: number | string | undefined) {
         async onSettled(){
             await queryClient.invalidateQueries({
                 queryKey: ['applicationTechnics'],
-            })
+            });
+            await queryClient.invalidateQueries({
+                queryKey: ['technicSheets'],
+            });
         }
     });
 
@@ -125,15 +134,16 @@ export function useUpdateApplicationsTechnic(id: number | string | undefined) {
         const data: IApplicationTechnic = {technic_sheet: technicSheetId};
         updateApplicationsTechnicMutation.mutate({data:data});
     }
-    const acceptApp = (description: string | undefined) => {
+    const acceptApp = (description: string | undefined, TSId: number | undefined) => {
         const data: IApplicationTechnic = {
             isChecked: false,
             is_cancelled: false,
+            technic_sheet: TSId,
             description: description?.replace(msgREJECT,"")
         }
         updateApplicationsTechnicMutation.mutate({data:data});
     }
-    const rejectApp = (description: string | undefined) => {
+    const rejectApp = (description: string | undefined,  TSId: number | undefined) => {
         const data: IApplicationTechnic = {
             isChecked: false,
             is_cancelled: true,
