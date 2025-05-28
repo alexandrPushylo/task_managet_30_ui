@@ -29,12 +29,15 @@ export interface PriorityIdListDto{
 export interface ConflictIdListDto{
     conflict_technic_sheet: number[];
 }
+
+export interface TSWithTechTitleItem{
+    title: string;
+    technic_sheet_ids: number[];
+    driver_sheet_ids: number[];
+    is_exists_free: boolean;
+}
 export interface TSWithTechTitle {
-    data: {
-        title: string;
-        technic_sheet_ids: number[];
-        driver_sheet_ids: number[];
-    }[];
+    data: TSWithTechTitleItem[];
 }
 
 //  ============================================================================
@@ -60,6 +63,18 @@ export function useGetTechnicSheetWithTechTitle(current_day?: string) {
     })
     return {tSWTechTitle, isLoading, isError};
 }
+export function useGetTechnicSheetWithTechTitleForAdd(current_day?: string) {
+    const url_current_day = current_day?`?current_day=${current_day}`: '';
+    const {data: tSWTechTitleForAdd, isLoading, isError} = useQuery({
+        queryKey: ['technicSheets', 'TSWTechTitle', 'forAdd', current_day],
+        queryFn: async (meta) => {
+            const response = await instance.get<TSWithTechTitle>(`/api/get_technic_sheet_with_tech_title/${url_current_day}&for_add=True`, {signal: meta.signal});
+            return response.data;
+        },
+    })
+    return {tSWTechTitleForAdd, isLoading, isError};
+}
+
 export function useFetchTechnicSheetById(id: string | undefined) {
     const {data: technicSheet, isLoading, isError, isPending} = useQuery({
         queryKey: ['technicSheets', 'technicSheet', 'byId', id],
