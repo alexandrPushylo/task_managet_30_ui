@@ -4,6 +4,7 @@ import UsersFooter from "./UsersFooter";
 import TechnicsFooter from "./TechnicsFooter";
 import ConstructionSiteFooter from "./ConstructionSiteFooter";
 import ConstructionSiteArchivesFooter from "./ConstructionSiteArchiveFooter";
+import CreateAppFooter from "./CreateAppFooter";
 
 
 const cssStyle: CSSProperties = {
@@ -26,7 +27,8 @@ function Footer() {
                 <Route path="/construction_sites" element={<ConstructionSiteFooter/>}/>
                 <Route path="/construction_sites/archive" element={<ConstructionSiteArchivesFooter/>}/>
 
-
+                <Route path="/edit_app/:appTodayId" element={<CreateAppFooter/>}/>
+                <Route path="/create_app/:constrSiteId" element={<CreateAppFooter/>}/>
 
                 <Route path="/logout" element={<></>}/>
                 <Route path="/login" element={<></>}/>
