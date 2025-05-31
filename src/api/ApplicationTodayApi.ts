@@ -107,7 +107,32 @@ export function useCreateApplicationsToday(){
         data: createApplicationsTodayMutation.data
     };
 }
+export function useDeleteApplicationsToday(id: number | string | undefined) {
+    const queryClient = useQueryClient();
 
+    const  deleteApplicationsTodayMutation = useMutation({
+        mutationFn: async (meta: any) => {
+            const response = await instance.delete(`/api/application_today/${id}/`, {signal: meta.signal});
+            return response.data;
+        },
+
+        async onSettled(){
+            await queryClient.invalidateQueries({
+                queryKey: ['applicationsToday'],
+            });
+            await queryClient.invalidateQueries({
+                queryKey: ['technicSheets'],
+            });
+            await queryClient.invalidateQueries({
+                queryKey: ['applicationTechnics'],
+            });
+        }
+    });
+
+    return {
+        handleDelete: deleteApplicationsTodayMutation.mutate
+    };
+}
 export function useUpdateApplicationsToday(id: number | string | undefined) {
     const queryClient = useQueryClient();
 
