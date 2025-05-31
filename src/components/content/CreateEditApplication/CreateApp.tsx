@@ -9,7 +9,7 @@ import {
     ButtonAddApp
 
 } from './Components';
-import {useParams} from "react-router";
+import {useParams, useNavigate, useLocation, useSearchParams} from "react-router";
 import {useFetchConstructionSiteById} from "../../../api/constructionSiteApi";
 import {useAppSelector} from "../../../store/store";
 import {applicationSlice} from "../../../store/slices/applicationSlice";
@@ -25,15 +25,18 @@ export interface IDisplayComponent {
 }
 
 export default function CreateApp() {
-    const {constrSiteId} = useParams<{ constrSiteId: string }>()
-    const {appTodayId} = useParams<{ appTodayId: string }>()
+    const [search ] = useSearchParams();
+
+    const appTodayId = search.get('appTodayId') ?? undefined;
+    const constrSiteId = search.get('constrSiteId') ?? undefined;
+    const current_day = search.get('currentDay') ?? undefined;
 
     const [displayAT, setDisplayAT] = useState(true);
     const [displayAM, setDisplayAM] = useState(false);
     const [displayBAT, setDisplayBAT] = useState(true);
     const [displayBAM, setDisplayBAM] = useState(true);
 
-    const currentDay = useAppSelector(applicationSlice.selectors.selectCurrentDay);
+    const currentDay = useAppSelector(applicationSlice.selectors.selectCurrentDay) ?? current_day;
     const {appData} = useAppData({current_day: currentDay});
 
     const {appToday: AppTodayFromCreate} = useGetOrCreateApplicationsTodayByCW({

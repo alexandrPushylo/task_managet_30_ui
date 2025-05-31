@@ -27,8 +27,7 @@ function Footer() {
                 <Route path="/construction_sites" element={<ConstructionSiteFooter/>}/>
                 <Route path="/construction_sites/archive" element={<ConstructionSiteArchivesFooter/>}/>
 
-                <Route path="/edit_app/:appTodayId" element={<CreateAppFooter/>}/>
-                <Route path="/create_app/:constrSiteId" element={<CreateAppFooter/>}/>
+                <Route path="/edit_app/" element={<CreateAppFooter/>}/>
 
                 <Route path="/logout" element={<></>}/>
                 <Route path="/login" element={<></>}/>

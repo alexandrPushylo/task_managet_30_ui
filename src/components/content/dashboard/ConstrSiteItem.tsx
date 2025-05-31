@@ -356,7 +356,7 @@ function CardFooter({appToday, appData, constrSiteItem}: CardFooterProps) {
                         <p className="m-0 fw-bolder text-warning">Ожидание подачи заявки</p> :
                         <div>
                             <BtnDelete appTodayId={appToday.id}/>
-                            <BtnEdit appTodayId={appToday.id}/>
+                            <BtnEdit appTodayId={appToday.id} appData={appData}/>
                         </div>
                     }
                     {appToday.status === 'submitted' && <BtnApprove appTodayId={appToday.id}/>}
@@ -384,21 +384,18 @@ function BtnDelete({appTodayId}: BtnProps) {
         onClick={() => alert(`delete ${appTodayId}`)}
     ><i className="fa-solid fa-trash"></i></button>
 }
-function BtnEdit({appTodayId, constrSiteId}: BtnProps) {
-    const navigate = useNavigate();
-    return <button
-        type="button"
-        className="btn btn-outline-primary px-5 mx-1"
-        onClick={()=>navigate(`/edit_app/${appTodayId}`)}
-    ><i className="fa-regular fa-pen-to-square"></i></button>
+
+
+function BtnEdit({appTodayId, appData}: BtnProps) {
+    return <Link to={`/edit_app/?appTodayId=${appTodayId}&currentDay=${appData?.current_date.date}`}
+                 className="btn btn-outline-primary px-5 mx-1"
+    ><i className="fa-regular fa-pen-to-square"></i></Link>
 }
+
 function BtnCreate({constrSiteId, appData}: BtnProps) {
-    const navigate = useNavigate();
-    return <button
-        type="button"
-        className="btn btn-outline-primary"
-        onClick={()=>navigate(`/create_app/${constrSiteId}`)}
-    ><i className="fa-solid fa-plus"></i></button>
+    return <Link to={`/edit_app/?constrSiteId=${constrSiteId}&currentDay=${appData?.current_date.date}`}
+                 className="btn btn-outline-primary"
+    ><i className="fa-solid fa-plus"></i></Link>
 }
 function BtnApprove({appTodayId}: BtnProps) {
     const navigate = useNavigate();
