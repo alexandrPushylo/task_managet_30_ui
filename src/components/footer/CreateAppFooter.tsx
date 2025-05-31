@@ -12,7 +12,7 @@ export default function CreateAppFooter(){
                 className="btn btn-success"
                 type="button"
                 onClick={() => {
-                    navigate("/dashboard");
+                    navigate(-1);
                 }}
             >Отмена</button>
         </div>

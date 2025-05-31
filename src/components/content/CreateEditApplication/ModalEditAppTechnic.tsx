@@ -118,11 +118,17 @@ export function ModalEditAppTechnic({appToday}:ModalEditAppTechnicProps) {
                 </div>
 
                 <div className="modal-footer" style={{justifyContent: "space-between"}}>
-                    <button style={{textAlign: 'left'}} type="button" className="btn btn-secondary"
-                            data-bs-dismiss="modal">Отмена
+                    <button style={{textAlign: 'left'}}
+                            type="button"
+                            className="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                    >Отмена
                     </button>
-                    {TSDataItem && <button onClick={createAppTechnic} type="button"
-                             className="btn btn-primary"
+                    {TSDataItem &&
+                        <button onClick={createAppTechnic}
+                                type="button"
+                                className="btn btn-primary"
+                                data-bs-dismiss="modal"
                     >Добавить</button>}
                 </div>
 
@@ -154,7 +160,7 @@ function SelectTechTitle({TSDataItem, setTSDataItem, tSWTechTitleForAdd}:SelectT
                    onChange={e => setTSData(e.target.value)}
     >
         <option value={undefined}>---</option>
-        {tSWTechTitleForAdd?.data.map((item, index) => {
+        {tSWTechTitleForAdd?.data?.map((item, index) => {
             return <option
                 key={index}
                 value={item.title}
