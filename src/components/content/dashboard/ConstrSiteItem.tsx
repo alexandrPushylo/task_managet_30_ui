@@ -11,7 +11,8 @@ import {ConflictIdListDto, PriorityIdListDto, TechnicSheetDto} from "../../../ap
 import {DriverSheetDto} from "../../../api/driverSheetApi";
 import {ApplicationMaterialDto} from "../../../api/applicationMaterialApi";
 import {useTextareaAutosize} from "../../../assets/services";
-import {useNavigate} from "react-router";
+import {useNavigate, Link} from "react-router";
+import ModalDeleteAppToday from "./ModalDeleteAppToday";
 
 
 function getBorderStyle(appStatus?: AppTodayStatus) {
@@ -377,12 +378,15 @@ interface BtnProps {
     constrSiteId?: number;
 }
 function BtnDelete({appTodayId}: BtnProps) {
-    const navigate = useNavigate();
-    return <button
-        type="button"
-        className="btn btn-outline-danger mx-1"
-        onClick={() => alert(`delete ${appTodayId}`)}
-    ><i className="fa-solid fa-trash"></i></button>
+    return <>
+        <button
+            type="button"
+            className="btn btn-outline-danger mx-1"
+            data-bs-toggle="modal"
+            data-bs-target={"#delete_app" + appTodayId}
+        ><i className="fa-solid fa-trash"></i></button>
+        <ModalDeleteAppToday appTodayId={appTodayId}/>
+    </>
 }
 
 
